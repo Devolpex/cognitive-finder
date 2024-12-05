@@ -1,3 +1,0 @@
-docker/data
-!docker/data/init.sql
-!docker/data/init.js
