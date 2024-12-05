@@ -9,7 +9,7 @@ services:
       PGDATA: /data/postgres
     volumes:
       - ./data/pgsql:/data/postgres
-      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     networks:
@@ -24,7 +24,7 @@ services:
       - 27020:27017
     volumes:
       - ./data/mongo:/data
-      - ./data/init.js:/docker-entrypoint-initdb.d/init.js
+      - ./init.js:/docker-entrypoint-initdb.d/init.js
     environment:
       - MONGO_INITDB_ROOT_USERNAME=user
       - MONGO_INITDB_ROOT_PASSWORD=password
