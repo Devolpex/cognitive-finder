@@ -1,0 +1,61 @@
+# Default Profile
+server:
+  port: 8882
+
+spring:
+  application:
+    name: patient-microservice
+  data:
+    mongodb:
+      host: localhost
+      port: 27020
+      database: patient_db
+  jpa:
+    hibernate:
+      ddl-auto: none
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+      config:
+        enabled: false
+        format: yaml
+        default-context: application
+        profile-separator: "-"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+---
+# Kubernetes Profile
+spring:
+  config:
+    activate:
+      on-profile: k8s
+  data:
+    mongodb:
+      uri: mongodb://k8s-mongodb-service:27017/patient_db # Replace with your Kubernetes MongoDB service URI
+  cloud:
+    consul:
+      host: consul-service # Replace with the Consul service name in Kubernetes
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        health-check-path: /actuator/health
+        health-check-interval: 5s
+      config:
+        enabled: true
+        default-context: k8s-context
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
