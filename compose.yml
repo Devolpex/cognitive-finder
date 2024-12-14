@@ -1,0 +1,101 @@
+services:
+  # PostgreSQL
+  postgresql:
+    container_name: cog_postgresql
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - cog-net
+    restart: unless-stopped
+
+  # MongoDB
+  mongodb:
+    image: mongo
+    container_name: cog_mongodb
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - ./init.js:/docker-entrypoint-initdb.d/init.js
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - cog-net
+    restart: unless-stopped
+
+  # Consul
+  consul:
+    container_name: cog_consul
+    image: consul:1.15.4
+    command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0
+    ports:
+      - "8500:8500" # Consul HTTP API and Web UI
+      - "8600:8600/udp" # Consul DNS
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+    volumes:
+      - consul-data:/consul/data
+    networks:
+      - cog-net
+    restart: unless-stopped
+
+  # Keycloak MySQL
+  keycloak-mysql:
+    container_name: cog_keycloak_mysql
+    image: mysql:8
+    ports:
+      - "3310:3306"
+    volumes:
+      - keycloak-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_keycloak
+      MYSQL_USER: user-dev
+      MYSQL_PASSWORD: password
+    networks:
+      - cog-net
+
+  # Keycloak
+  keycloak:
+    container_name: cog_keycloak
+    image: quay.io/keycloak/keycloak:26.0.7
+    command: start-dev
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+      - KC_DB_URL=jdbc:mysql://keycloak-mysql:3306/db_keycloak?createDatabaseIfNotExist=true
+      - KC_DB_DRIVER=com.mysql.cj.jdbc.Driver
+      - KC_DB_POOL_INITIAL_SIZE=10
+      - KC_DB_POOL_MAX_SIZE=100
+      - KC_DB_POOL_MIN_SIZE=5
+      - KC_DB_SCHEMA=db_keycloak
+    ports:
+      - "8181:8080"
+    depends_on:
+      - keycloak-mysql
+    networks:
+      - cog-net
+
+# Networks
+networks:
+  cog-net:
+    driver: bridge
+
+# Volumes
+volumes:
+  postgresql-data:
+  mongodb-data:
+  consul-data:
+  keycloak-mysql-data:
