@@ -7,9 +7,12 @@ spring:
     name: patient-microservice
   data:
     mongodb:
-      host: localhost
-      port: 27020
-      database: patient_db
+      uri: mongodb://patient_user:patient_password@localhost:27020/patient_db
+      # host: localhost
+      # port: 27020
+      # database: patient_db
+      # username: user
+      # password: password
   jpa:
     hibernate:
       ddl-auto: none

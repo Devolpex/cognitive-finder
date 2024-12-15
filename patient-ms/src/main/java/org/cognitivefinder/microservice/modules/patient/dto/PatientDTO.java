@@ -1,5 +1,7 @@
 package org.cognitivefinder.microservice.modules.patient.dto;
 
+import org.cognitivefinder.microservice.modules.device.DeviceDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +16,5 @@ public class PatientDTO {
     private String name;
     private String maladie;
     private ClientDTO client;
+    private DeviceDTO device;
 }

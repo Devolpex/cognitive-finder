@@ -3,6 +3,9 @@ package org.cognitivefinder.microservice.modules.patient;
 import java.util.List;
 
 import org.cognitivefinder.microservice.errors.exception.BusinessException;
+import org.cognitivefinder.microservice.modules.device.DeviceDTO;
+import org.cognitivefinder.microservice.modules.device.DeviceREQ;
+import org.cognitivefinder.microservice.modules.device.DeviceService;
 import org.cognitivefinder.microservice.modules.patient.dto.PatientDTO;
 import org.cognitivefinder.microservice.modules.patient.http.PatientREQ;
 import org.cognitivefinder.microservice.utils.IService;
@@ -21,6 +24,7 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
 
     private final PatientRepository repository;
     private final PatientMapperImpl mapper;
+    private final DeviceService deviceService;
 
     @Override
     public PatientDTO create(PatientREQ req) {
@@ -33,7 +37,16 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
         patient = repository.save(patient);
 
         // TODO: Send the device information to the tracking microservice
-        return mapper.toDTO(patient);
+        DeviceREQ deviceREQ = DeviceREQ.builder()
+                .patientId(patient.getId())
+                .imei(req.deviceImei())
+                .sim(req.deviceNumber())
+                .build();
+        DeviceDTO deviceDTO = deviceService.createDevice(deviceREQ);
+        PatientDTO patientDTO = mapper.toDTO(patient);
+        patientDTO.setDevice(deviceDTO);
+
+        return patientDTO;
     }
 
     @Override
