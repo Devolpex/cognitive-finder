@@ -12,11 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class TraccarDeviceService {
 
@@ -25,10 +25,12 @@ public class TraccarDeviceService {
 
     private final RestTemplate restTemplate;
 
+    private final TraccarHeaders traccarHeaders;
+
     // Add device to Traccar
     public Long addDevice(DeviceTCR body) {
         String url = BASE_URL + "/devices";
-        HttpHeaders headers = TraccarHeaders.createHeaders();
+        HttpHeaders headers = traccarHeaders.createHeaders();
         HttpEntity<DeviceTCR> request = new HttpEntity<>(body, headers);
 
         // Send the POST request
@@ -54,7 +56,7 @@ public class TraccarDeviceService {
     // Update device in Traccar
     public void updateDevice(DeviceTCR body, Long traccarId) {
         String url = BASE_URL + "/devices/" + traccarId;
-        HttpHeaders headers = TraccarHeaders.createHeaders();
+        HttpHeaders headers = traccarHeaders.createHeaders();
         HttpEntity<DeviceTCR> request = new HttpEntity<>(body, headers);
         try {
             restTemplate.exchange(url, HttpMethod.PUT, request, Map.class);
@@ -69,7 +71,7 @@ public class TraccarDeviceService {
     // Delete device in Traccar
     public void deleteDevice(Long traccarId) {
         String url = BASE_URL + "/devices/" + traccarId;
-        HttpHeaders headers = TraccarHeaders.createHeaders();
+        HttpHeaders headers = traccarHeaders.createHeaders();
         HttpEntity<DeviceTCR> request = new HttpEntity<>(headers);
         try {
             restTemplate.exchange(url, HttpMethod.DELETE, request, Map.class);

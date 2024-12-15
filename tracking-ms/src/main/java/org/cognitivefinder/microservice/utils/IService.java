@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface IService<DTO, CREQ, UREQ, ID> {
     DTO create(CREQ req) throws BusinessException;
 
-    DTO update(String id, UREQ req) throws BusinessException;
+    DTO update(ID id, UREQ req) throws BusinessException;
 
     DTO findById(ID id) throws BusinessException;
 

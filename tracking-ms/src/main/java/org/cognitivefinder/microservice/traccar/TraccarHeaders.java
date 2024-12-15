@@ -5,16 +5,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class TraccarHeaders {
 
     @Value("${traccar.user}")
-    private static String username;
+    private String username;
     @Value("${traccar.password}")
-    private static String password;
+    private String password;
 
     // Helper method to create HTTP headers with basic auth
-    public static HttpHeaders createHeaders() {
+    public HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth(username, password);
         headers.setContentType(MediaType.APPLICATION_JSON);
