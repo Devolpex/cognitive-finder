@@ -9,7 +9,7 @@ services:
       PGDATA: /var/lib/postgresql/data
     volumes:
       - postgresql-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     networks:
@@ -24,7 +24,7 @@ services:
       - "27020:27017"
     volumes:
       - mongodb-data:/data/db
-      - ./init.js:/docker-entrypoint-initdb.d/init.js
+      - ./docker/init.js:/docker-entrypoint-initdb.d/init.js
     environment:
       - MONGO_INITDB_ROOT_USERNAME=user
       - MONGO_INITDB_ROOT_PASSWORD=password
@@ -47,47 +47,6 @@ services:
     networks:
       - cog-net
     restart: unless-stopped
-
-  # Kong Gateway
-  kong:
-    container_name: cog_kong
-    image: kong:latest
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: cog_postgresql
-      KONG_PG_USER: user
-      KONG_PG_PASSWORD: password
-      KONG_PROXY_ACCESS_LOG: /dev/stdout
-      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-      KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
-    depends_on:
-      - postgresql
-    ports:
-      - "8000:8000" # Kong Proxy
-      - "8443:8443" # Kong Proxy (SSL)
-      - "8001:8001" # Kong Admin API
-      - "8444:8444" # Kong Admin API (SSL)
-    networks:
-      - cog-net
-    restart: unless-stopped
-
-  # Kong Migrations (only needed for the first run)
-  kong-migrations:
-    container_name: cog_kong_migrations
-    image: kong:latest
-    command: kong migrations bootstrap
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: cog_postgresql
-      KONG_PG_USER: user
-      KONG_PG_PASSWORD: password
-    depends_on:
-      - postgresql
-    networks:
-      - cog-net
-    restart: on-failure
 
   # Keycloak MySQL
   keycloak-mysql:
@@ -129,6 +88,42 @@ services:
     networks:
       - cog-net
 
+  # Traccar MySQL
+  traccar_mysql:
+    container_name: cog_traccar_mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cog_traccar_db
+      MYSQL_USER: traccar
+      MYSQL_PASSWORD: traccar
+    volumes:
+      - traccar_mysql:/var/lib/mysql
+      - ./docker/init-traccar.sql:/docker-entrypoint-initdb.d/init-traccar.sql
+    ports:
+      - "3311:3306"
+    networks:
+      - cog-net
+  # Traccar
+  traccar:
+    image: traccar/traccar:latest
+    container_name: cog_traccar
+    ports:
+      - "8082:8082"  # Traccar UI
+      # Chnage the range pf ports to avoid conflits with other services (5000 - 5150) to (6000 - 6150) for tcp and udp
+      - "6000-6150:5000-5150"
+      - "6000-6150:5000-5150/udp"
+    volumes:
+      - traccar_logs:/opt/traccar/logs
+      - ./docker/traccar.xml:/opt/traccar/conf/traccar.xml:ro
+    environment:
+      - JAVA_OPTS=-Xms1g -Xmx1g
+    depends_on:
+      - traccar_mysql
+    networks: 
+      - cog-net
+
+
 # Networks
 networks:
   cog-net:
@@ -140,3 +135,5 @@ volumes:
   mongodb-data:
   consul-data:
   keycloak-mysql-data:
+  traccar_mysql:
+  traccar_logs:

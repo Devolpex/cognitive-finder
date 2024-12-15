@@ -1,0 +1,41 @@
+# Default Profile
+server:
+  port: 8080
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/cognitivefinder
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-microservice
+          uri: lb://user-microservice
+          predicates:
+            - Path=/api/test/**
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+      config:
+        enabled: false
+        format: yaml
+        default-context: application
+        profile-separator: "-"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  auth:
+    converter:
+      resource-id: api-gateway
+      principle-attribute: preferred_username

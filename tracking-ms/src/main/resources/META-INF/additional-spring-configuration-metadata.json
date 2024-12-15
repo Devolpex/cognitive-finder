@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "traccar.api",
+    "type": "java.lang.String",
+    "description": "A description for 'traccar.api'"
+  },
+  {
+    "name": "traccar.user",
+    "type": "java.lang.String",
+    "description": "A description for 'traccar.user'"
+  },
+  {
+    "name": "traccar.password",
+    "type": "java.lang.String",
+    "description": "A description for 'traccar.password'"
+  }
+]}
