@@ -1,10 +1,10 @@
-package org.cognitivefinder.microservice;
+package org.cognitivefinder.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroserviceApplicationTests {
+class UserApplicationTests {
 
 	@Test
 	void contextLoads() {
