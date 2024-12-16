@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice;
+package org.cognitivefinder.patient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class PatientMsApplication {
+public class PatientApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PatientMsApplication.class, args);
+		SpringApplication.run(PatientApplication.class, args);
 	}
 
 }

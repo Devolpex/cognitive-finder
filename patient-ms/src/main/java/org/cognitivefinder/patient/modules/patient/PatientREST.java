@@ -1,11 +1,11 @@
-package org.cognitivefinder.microservice.modules.patient;
+package org.cognitivefinder.patient.modules.patient;
 
 import java.util.List;
 
-import org.cognitivefinder.microservice.modules.patient.dto.PatientDTO;
-import org.cognitivefinder.microservice.modules.patient.http.PatientREQ;
-import org.cognitivefinder.microservice.utils.IRESTController;
-import org.cognitivefinder.microservice.utils.OwnPageRES;
+import org.cognitivefinder.patient.modules.patient.dto.PatientDTO;
+import org.cognitivefinder.patient.modules.patient.http.PatientREQ;
+import org.cognitivefinder.patient.utils.IRESTController;
+import org.cognitivefinder.patient.utils.OwnPageRES;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

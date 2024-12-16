@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.modules.patient.dto;
+package org.cognitivefinder.patient.modules.patient.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

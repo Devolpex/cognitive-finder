@@ -1,8 +1,8 @@
-package org.cognitivefinder.microservice.utils;
+package org.cognitivefinder.patient.utils;
 
 import java.util.List;
 
-import org.cognitivefinder.microservice.errors.exception.BusinessException;
+import org.cognitivefinder.patient.errors.exception.BusinessException;
 import org.springframework.data.domain.Pageable;
 
 public interface IService<DTO, CREQ, UREQ, ID> {

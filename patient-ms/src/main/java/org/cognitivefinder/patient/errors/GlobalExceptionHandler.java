@@ -1,9 +1,9 @@
-package org.cognitivefinder.microservice.errors;
+package org.cognitivefinder.patient.errors;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.cognitivefinder.microservice.errors.exception.BusinessException;
+import org.cognitivefinder.patient.errors.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

@@ -1,8 +1,8 @@
-package org.cognitivefinder.microservice;
+package org.cognitivefinder.patient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PatientMsApplicationTests {
+class PatientApplicationTests {
 }

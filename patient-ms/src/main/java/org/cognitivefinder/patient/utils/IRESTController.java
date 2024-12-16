@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.utils;
+package org.cognitivefinder.patient.utils;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.errors;
+package org.cognitivefinder.patient.errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

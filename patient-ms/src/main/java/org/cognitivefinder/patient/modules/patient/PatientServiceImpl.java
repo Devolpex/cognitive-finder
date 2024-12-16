@@ -1,15 +1,15 @@
-package org.cognitivefinder.microservice.modules.patient;
+package org.cognitivefinder.patient.modules.patient;
 
 import java.util.List;
 
-import org.cognitivefinder.microservice.errors.exception.BusinessException;
-import org.cognitivefinder.microservice.modules.device.DeviceDTO;
-import org.cognitivefinder.microservice.modules.device.DeviceREQ;
-import org.cognitivefinder.microservice.modules.device.DeviceService;
-import org.cognitivefinder.microservice.modules.patient.dto.PatientDTO;
-import org.cognitivefinder.microservice.modules.patient.http.PatientREQ;
-import org.cognitivefinder.microservice.utils.IService;
-import org.cognitivefinder.microservice.utils.OwnPageRES;
+import org.cognitivefinder.patient.errors.exception.BusinessException;
+import org.cognitivefinder.patient.modules.device.DeviceDTO;
+import org.cognitivefinder.patient.modules.device.DeviceREQ;
+import org.cognitivefinder.patient.modules.device.DeviceService;
+import org.cognitivefinder.patient.modules.patient.dto.PatientDTO;
+import org.cognitivefinder.patient.modules.patient.http.PatientREQ;
+import org.cognitivefinder.patient.utils.IService;
+import org.cognitivefinder.patient.utils.OwnPageRES;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -108,5 +108,4 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
     public List<PatientDTO> findAll() {
         return null;
     }
-
 }

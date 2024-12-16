@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.modules.device;
+package org.cognitivefinder.patient.modules.device;
 
 import lombok.Builder;
 

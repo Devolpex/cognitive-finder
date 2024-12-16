@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.utils;
+package org.cognitivefinder.patient.utils;
 
 public interface IMapper<E,DTO,CREQ,UREQ> {
     DTO toDTO(E entity);

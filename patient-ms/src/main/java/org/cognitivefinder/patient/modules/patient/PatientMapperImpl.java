@@ -1,8 +1,8 @@
-package org.cognitivefinder.microservice.modules.patient;
+package org.cognitivefinder.patient.modules.patient;
 
-import org.cognitivefinder.microservice.modules.patient.dto.PatientDTO;
-import org.cognitivefinder.microservice.modules.patient.http.PatientREQ;
-import org.cognitivefinder.microservice.utils.IMapper;
+import org.cognitivefinder.patient.modules.patient.dto.PatientDTO;
+import org.cognitivefinder.patient.modules.patient.http.PatientREQ;
+import org.cognitivefinder.patient.utils.IMapper;
 import org.springframework.stereotype.Component;
 
 @Component

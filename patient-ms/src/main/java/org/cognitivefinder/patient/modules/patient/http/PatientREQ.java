@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.modules.patient.http;
+package org.cognitivefinder.patient.modules.patient.http;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

@@ -1,6 +1,6 @@
-package org.cognitivefinder.microservice.modules.patient.dto;
+package org.cognitivefinder.patient.modules.patient.dto;
 
-import org.cognitivefinder.microservice.modules.device.DeviceDTO;
+import org.cognitivefinder.patient.modules.device.DeviceDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

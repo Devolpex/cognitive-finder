@@ -1,9 +1,9 @@
-package org.cognitivefinder.microservice.errors.exception;
+package org.cognitivefinder.patient.errors.exception;
 
 import java.util.List;
 import java.util.Map;
 
-import org.cognitivefinder.microservice.errors.OwnFieldError;
+import org.cognitivefinder.patient.errors.OwnFieldError;
 import org.springframework.http.HttpStatus;
 
 public class BusinessException extends RuntimeException {

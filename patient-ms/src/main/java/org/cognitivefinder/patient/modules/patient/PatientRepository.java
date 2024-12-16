@@ -1,4 +1,4 @@
-package org.cognitivefinder.microservice.modules.patient;
+package org.cognitivefinder.patient.modules.patient;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
