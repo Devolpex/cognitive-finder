@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.cognitivefinder</groupId>
-	<artifactId>microservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>tracking</name>
+	<artifactId>tracking</artifactId>
+	<version>0.0.1</version>
+	<name>tracking-ms</name>
 	<description>Cognitive Finder Tracking Microservice</description>
 	<url />
 	<licenses>
