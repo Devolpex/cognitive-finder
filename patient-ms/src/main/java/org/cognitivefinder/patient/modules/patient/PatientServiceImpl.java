@@ -36,7 +36,6 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                 .build();
         patient = repository.save(patient);
 
-        // TODO: Send the device information to the tracking microservice
         DeviceREQ deviceREQ = DeviceREQ.builder()
                 .patientId(patient.getId())
                 .imei(req.deviceImei())
@@ -55,15 +54,25 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
 
         return repository.findById(id)
                 .map(p -> {
+                    // Update the device information in the tracking microservice
+                    DeviceDTO deviceDTO = deviceService.fetchByPatientId(id);
+                    if (!deviceDTO.getImei().equals(req.deviceImei())
+                            || !deviceDTO.getSim().equals(req.deviceNumber())) {
+                        DeviceREQ deviceREQ = DeviceREQ.builder()
+                                .patientId(id)
+                                .imei(req.deviceImei())
+                                .sim(req.deviceNumber())
+                                .build();
+                        deviceDTO = deviceService.update(deviceDTO.getId(), deviceREQ);
+                    }
+                    // Update the patient information
                     p.setName(req.name());
                     p.setMaladie(req.maladie());
                     p = repository.save(p);
-
-                    /**
-                     * TODO: Get the device information form the tracking microservice, if has
-                     * changed update the device information on Tracking microservice
-                     */
-                    return mapper.toDTO(p);
+                    // Return the updated patient information
+                    PatientDTO patientDTO = mapper.toDTO(p);
+                    patientDTO.setDevice(deviceDTO);
+                    return patientDTO;
                 })
                 .orElseThrow(() -> {
                     log.error("Patient not found");
@@ -75,8 +84,12 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
     public PatientDTO findById(String id) {
         return repository.findById(id)
                 .map((patient) -> {
-                    // TODO: Get the device information form the tracking microservice
-                    return mapper.toDTO(patient);
+                    // Fetch the device information from the tracking microservice
+                    DeviceDTO deviceDTO = deviceService.fetchByPatientId(id);
+                    // Return the patient information
+                    PatientDTO patientDTO = mapper.toDTO(patient);
+                    patientDTO.setDevice(deviceDTO);
+                    return patientDTO;
                 })
                 .orElseThrow(() -> {
                     log.error("Patient not found");
@@ -89,7 +102,9 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
         repository.findById(id)
                 .ifPresentOrElse(
                         patient -> {
-                            // TODO: Delete the device information from the tracking microservice
+                            // Delete the device information from the tracking microservice
+                            deviceService.deleteByPatientId(id);
+                            // Delete the patient information
                             repository.deleteById(id);
                             log.info("Patient with id {} deleted", id);
                         },
@@ -106,6 +121,13 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
 
     @Override
     public List<PatientDTO> findAll() {
-        return null;
+        return repository.findAll().stream()
+                .map(patient -> {
+                    DeviceDTO deviceDTO = deviceService.fetchByPatientId(patient.getId());
+                    PatientDTO patientDTO = mapper.toDTO(patient);
+                    patientDTO.setDevice(deviceDTO);
+                    return patientDTO;
+                })
+                .toList();
     }
 }

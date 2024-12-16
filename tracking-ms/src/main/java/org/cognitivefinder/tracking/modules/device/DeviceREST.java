@@ -64,4 +64,17 @@ public class DeviceREST implements IRESTController<DeviceDTO, DeviceREQ, DeviceR
         throw new UnsupportedOperationException("Unimplemented method 'fetchAll'");
     }
 
+    // Fetch by patient id
+    @GetMapping("/api/v1/device/patient/{patientId}")
+    public ResponseEntity<DeviceDTO> fetchByPatientId(@PathVariable String patientId) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.findByPatientId(patientId));
+    }
+
+    // Delete by patient id
+    @DeleteMapping("/api/v1/device/patient/{patientId}")
+    public ResponseEntity<Void> deleteByPatientId(@PathVariable String patientId) {
+        service.deleteByPatientId(patientId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @FeignClient(name = "tracking-microservice")
 public interface DeviceService {
 
@@ -28,5 +27,11 @@ public interface DeviceService {
 
     @DeleteMapping("/api/v1/device/{id}")
     void delete(@PathVariable("id") Long id);
-    
+
+    @GetMapping("/api/v1/device/patient/{patientId}")
+    DeviceDTO fetchByPatientId(@PathVariable String patientId);
+
+    @DeleteMapping("/api/v1/device/patient/{patientId}")
+    void deleteByPatientId(@PathVariable String patientId);
+
 }

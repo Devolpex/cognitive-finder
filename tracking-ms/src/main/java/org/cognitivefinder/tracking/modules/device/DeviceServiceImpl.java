@@ -106,12 +106,23 @@ public class DeviceServiceImpl implements IService<DeviceDTO, DeviceREQ, DeviceR
 
 
     // Service to get Device information by patient id
-    public DeviceDTO findByPatientId(Long patientId) {
+    public DeviceDTO findByPatientId(String patientId) {
         return repository.findByPatientId(patientId)
                 .map(mapper::toDTO)
                 .orElseThrow(() -> {
                     log.error("Device not found with patient id {}", patientId);
                     return new BusinessException("Device not found", HttpStatus.NOT_FOUND);
+                });
+    }
+
+    // Service to delete device by patient id
+    public void deleteByPatientId(String patientId) {
+        repository.findByPatientId(patientId)
+                .ifPresentOrElse(device -> {
+                    repository.delete(device);
+                }, () -> {
+                    log.error("Device not found with patient id {}", patientId);
+                    throw new BusinessException("Device not found", HttpStatus.NOT_FOUND);
                 });
     }
 }

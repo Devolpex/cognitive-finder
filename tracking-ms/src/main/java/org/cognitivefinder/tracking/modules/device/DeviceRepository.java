@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device,Long> {
 
-    Optional<Device> findByPatientId(Long patientId);
+    Optional<Device> findByPatientId(String patientId);
     
 }
