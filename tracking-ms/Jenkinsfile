@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    tools{
+        jdk 'JDK21'
+        maven 'maven-3.8.7'
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'dev', credentialsId: 'github', url: 'https://github.com/Devolpex/cognitive-finder'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                dir('tracking-ms') {
+                    // Install dependencies for the tracking-ms microservice
+                    sh 'mvn test'
+                }
+            }
+        }
+    }
+}
