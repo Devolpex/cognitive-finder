@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.cognitivefinder</groupId>
-	<artifactId>microservice</artifactId>
+	<artifactId>apigateway</artifactId>
 	<version>0.0.1</version>
 	<name>api-gateway</name>
 	<description>Cognitive Finder API Gateway</description>

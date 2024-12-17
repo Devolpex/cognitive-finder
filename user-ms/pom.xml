@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.cognitivefinder</groupId>
-	<artifactId>microservice</artifactId>
+	<artifactId>user</artifactId>
 	<version>0.0.1</version>
 	<name>user-ms</name>
 	<description>User Microservice for Cognitive Finder</description>
