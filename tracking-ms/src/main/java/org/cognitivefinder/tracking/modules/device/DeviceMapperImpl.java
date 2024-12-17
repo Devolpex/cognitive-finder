@@ -25,6 +25,9 @@ public class DeviceMapperImpl implements IMapper<Device, DeviceDTO, DeviceREQ, D
 
     @Override
     public Device toEntity(DeviceREQ createRequest) {
+        if (createRequest == null) {
+            return null;
+        }
         return Device.builder()
                 .imei(createRequest.imei())
                 .sim(createRequest.sim())
@@ -34,6 +37,12 @@ public class DeviceMapperImpl implements IMapper<Device, DeviceDTO, DeviceREQ, D
 
     @Override
     public Device toEntity(DeviceREQ updateRequest, Device entity) {
+        if (updateRequest == null) {
+            return null;
+        }
+        if (entity == null) {
+            return null;
+        }
         entity.setImei(updateRequest.imei());
         entity.setSim(updateRequest.sim());
         entity.setPatientId(updateRequest.patientId());
