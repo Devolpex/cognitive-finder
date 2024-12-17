@@ -125,4 +125,11 @@ public class DeviceServiceImpl implements IService<DeviceDTO, DeviceREQ, DeviceR
                     throw new BusinessException("Device not found", HttpStatus.NOT_FOUND);
                 });
     }
+
+    // Service to fetch a list of devices by list of patient ids
+    public List<DeviceDTO> findByPatientIds(List<String> patientIds) {
+        return repository.findByPatientIdIn(patientIds).stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

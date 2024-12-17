@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -75,6 +76,13 @@ public class DeviceREST implements IRESTController<DeviceDTO, DeviceREQ, DeviceR
     public ResponseEntity<Void> deleteByPatientId(@PathVariable String patientId) {
         service.deleteByPatientId(patientId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // Fetch by list of patient ids
+    @GetMapping("/api/v1/device/patients")
+    public ResponseEntity<List<DeviceDTO>> fetchByPatientIds(@RequestParam List<String> patientIds) {
+        List<DeviceDTO> devices = service.findByPatientIds(patientIds);
+        return ResponseEntity.status(HttpStatus.OK).body(devices);
     }
 
 }
