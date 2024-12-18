@@ -5,6 +5,13 @@ pipeline {
         maven 'maven-3.8.7'
     }
 
+    environment {
+        // Define Docker Hub credentials and repository details
+        DOCKER_CREDENTIALS_ID = 'devolpex-docker'  // Jenkins credentials for Docker Hub
+        DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
+        DOCKER_TAG = '0.0.4'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
+    }
+
     stages {
         stage('Git Checkout') {
             steps {
@@ -17,6 +24,33 @@ pipeline {
                 dir('tracking-ms') {
                     // Install dependencies for the tracking-ms microservice
                     sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('tracking-ms') {
+                    script {
+                        // Build the Docker image
+                        sh """
+                            docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    // Login to Docker Hub (using Jenkins credentials)
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                            docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                        """
+                    }
                 }
             }
         }
