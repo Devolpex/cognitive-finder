@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tracking-postgres-statefulset
+  namespace: cog
+spec:
+  serviceName: "tracking-postgres"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tracking-postgres
+  template:
+    metadata:
+      labels:
+        app: tracking-postgres
+    spec:
+      containers:
+      - name: tracking-postgres-container
+        image: postgres:15.2 # Use the required version
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: tracking-postgres-config
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: tracking-postgres-config
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: tracking-postgres-config
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - name: tracking-postgres-pvc
+          mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+  volumeClaimTemplates:
+  - metadata:
+      name: tracking-postgres-pvc
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 128Mi
