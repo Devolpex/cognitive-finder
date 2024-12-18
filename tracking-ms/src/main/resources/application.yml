@@ -6,9 +6,9 @@ spring:
     name: tracking-microservice
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tracking_ms_db
-    username: user
-    password: password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tracking_ms_db}
+    username: ${SPRING_DATASOURCE_USERNAME:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,8 +23,8 @@ spring:
     password: ${spring.datasource.password}
   cloud:
     consul:
-      host: localhost
-      port: 8500
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
       discovery:
         service-name: ${spring.application.name}
         health-check-path: /actuator/health
@@ -44,9 +44,7 @@ management:
 
 # Traccar 
 traccar:
-  api: http://152.228.219.146:8082/api
-  user: admin
-  password: admin
-
-
+  api: ${TRACCAR_API:http://152.228.219.146:8082/api}
+  user: ${TRACCAR_USER:admin}
+  password: ${TRACCAR_PASSWORD:admin}
 # Test Jenkins
