@@ -47,4 +47,4 @@ traccar:
   api: ${TRACCAR_API:http://152.228.219.146:8082/api}
   user: ${TRACCAR_USER:admin}
   password: ${TRACCAR_PASSWORD:admin}
-# Test Jenkins
+# Test Jenkins for docker
