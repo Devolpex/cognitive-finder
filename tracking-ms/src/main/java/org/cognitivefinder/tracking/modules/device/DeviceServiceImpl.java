@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.cognitivefinder.tracking.errors.exception.BusinessException;
+import org.cognitivefinder.tracking.gps.device.DeviceTCR;
+import org.cognitivefinder.tracking.gps.device.TraccarDeviceService;
 import org.cognitivefinder.tracking.modules.device.dto.DeviceDTO;
 import org.cognitivefinder.tracking.modules.device.http.DeviceREQ;
-import org.cognitivefinder.tracking.traccar.device.DeviceTCR;
-import org.cognitivefinder.tracking.traccar.device.TraccarDeviceService;
 import org.cognitivefinder.tracking.utils.IService;
 import org.cognitivefinder.tracking.utils.OwnPageRES;
 import org.springframework.data.domain.Pageable;
