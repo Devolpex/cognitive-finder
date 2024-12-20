@@ -1,4 +1,4 @@
-package org.cognitivefinder.tracking.traccar.device;
+package org.cognitivefinder.tracking.gps.device;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

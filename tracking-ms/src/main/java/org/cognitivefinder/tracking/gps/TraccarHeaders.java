@@ -1,4 +1,4 @@
-package org.cognitivefinder.tracking.traccar;
+package org.cognitivefinder.tracking.gps;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
