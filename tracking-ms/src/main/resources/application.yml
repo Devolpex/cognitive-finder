@@ -44,7 +44,8 @@ management:
 
 # Traccar 
 traccar:
-  api: ${TRACCAR_API:http://152.228.219.146:8082/api}
+  api: ${TRACCAR_API:http://35.181.167.167:8082/api}
   user: ${TRACCAR_USER:admin}
   password: ${TRACCAR_PASSWORD:admin}
+  ws: ${TRACCAR_WS:ws://35.181.167.167:8082/api/socket}
 # Test Jenkins for docker

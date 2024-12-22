@@ -10,6 +10,7 @@ public class TrackingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TrackingApplication.class, args);
+
 	}
 
 }

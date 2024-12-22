@@ -13,5 +13,10 @@
     "name": "traccar.password",
     "type": "java.lang.String",
     "description": "A description for 'traccar.password'"
+  },
+  {
+    "name": "traccar.ws",
+    "type": "java.lang.String",
+    "description": "A description for 'traccar.ws'"
   }
 ]}
