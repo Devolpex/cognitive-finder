@@ -1,9 +1,9 @@
-package org.cognitivefinder.tracking.traccar.device;
+package org.cognitivefinder.tracking.gps.device;
 
 import java.util.Map;
 
 import org.cognitivefinder.tracking.errors.exception.BusinessException;
-import org.cognitivefinder.tracking.traccar.TraccarHeaders;
+import org.cognitivefinder.tracking.gps.TraccarHeaders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

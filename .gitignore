@@ -1,2 +1,6 @@
 docker/data/*
 logs/*
+
+# Editors
+.idea/*
+.vscode/*

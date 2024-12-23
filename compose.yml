@@ -26,8 +26,8 @@ services:
       - mongodb-data:/data/db
       - ./docker/init.js:/docker-entrypoint-initdb.d/init.js
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=user
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
     networks:
       - cog-net
     restart: unless-stopped
@@ -88,42 +88,6 @@ services:
     networks:
       - cog-net
 
-  # Traccar MySQL
-  traccar_mysql:
-    container_name: cog_traccar_mysql
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: cog_traccar_db
-      MYSQL_USER: traccar
-      MYSQL_PASSWORD: traccar
-    volumes:
-      - traccar_mysql:/var/lib/mysql
-      - ./docker/init-traccar.sql:/docker-entrypoint-initdb.d/init-traccar.sql
-    ports:
-      - "3311:3306"
-    networks:
-      - cog-net
-  # Traccar
-  traccar:
-    image: traccar/traccar:latest
-    container_name: cog_traccar
-    ports:
-      - "8082:8082"  # Traccar UI
-      # Chnage the range pf ports to avoid conflits with other services (5000 - 5150) to (6000 - 6150) for tcp and udp
-      - "6000-6150:5000-5150"
-      - "6000-6150:5000-5150/udp"
-    volumes:
-      - traccar_logs:/opt/traccar/logs
-      - ./docker/traccar.xml:/opt/traccar/conf/traccar.xml:ro
-    environment:
-      - JAVA_OPTS=-Xms1g -Xmx1g
-    depends_on:
-      - traccar_mysql
-    networks: 
-      - cog-net
-
-
 # Networks
 networks:
   cog-net:
@@ -135,5 +99,3 @@ volumes:
   mongodb-data:
   consul-data:
   keycloak-mysql-data:
-  traccar_mysql:
-  traccar_logs:

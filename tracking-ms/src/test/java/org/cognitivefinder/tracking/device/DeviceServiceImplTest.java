@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.cognitivefinder.tracking.errors.exception.BusinessException;
+import org.cognitivefinder.tracking.gps.device.DeviceTCR;
+import org.cognitivefinder.tracking.gps.device.TraccarDeviceService;
 import org.cognitivefinder.tracking.modules.device.*;
 import org.cognitivefinder.tracking.modules.device.dto.DeviceDTO;
 import org.cognitivefinder.tracking.modules.device.http.DeviceREQ;
-import org.cognitivefinder.tracking.traccar.device.DeviceTCR;
-import org.cognitivefinder.tracking.traccar.device.TraccarDeviceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
