@@ -7,10 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DeviceRepository extends JpaRepository<Device,Long> {
+public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     Optional<Device> findByPatientId(String patientId);
 
-    Optional<Device> findByPatientIdIn(List<String> patientIds);
-    
+    List<Device> findByPatientIdIn(List<String> patientIds);
+
 }
