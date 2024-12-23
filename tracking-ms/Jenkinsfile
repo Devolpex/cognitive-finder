@@ -7,9 +7,9 @@ pipeline {
 
     environment {
         // Define Docker Hub credentials and repository details
-        DOCKER_CREDENTIALS_ID = 'devolpex-docker'  // Jenkins credentials for Docker Hub
+        DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials for Docker Hub
         DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
-        DOCKER_TAG = '0.0.4'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
+        DOCKER_TAG = '0.0.6'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
     }
 
     stages {
