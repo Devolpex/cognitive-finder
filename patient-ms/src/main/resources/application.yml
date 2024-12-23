@@ -7,19 +7,14 @@ spring:
     name: patient-microservice
   data:
     mongodb:
-      uri: mongodb://patient_user:patient_password@localhost:27020/patient_db
-      # host: localhost
-      # port: 27020
-      # database: patient_db
-      # username: user
-      # password: password
+      uri: ${MONGODB_URI:mongodb://patient_user:patient_password@localhost:27020/patient_db}
   jpa:
     hibernate:
       ddl-auto: none
   cloud:
     consul:
-      host: localhost
-      port: 8500
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
       discovery:
         service-name: ${spring.application.name}
         health-check-path: /actuator/health
@@ -29,6 +24,11 @@ spring:
         format: yaml
         default-context: application
         profile-separator: "-"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:http://localhost:8181/realms/COG}
 
 management:
   endpoints:
@@ -36,29 +36,7 @@ management:
       exposure:
         include: health,info
 
----
-# Kubernetes Profile
-spring:
-  config:
-    activate:
-      on-profile: k8s
-  data:
-    mongodb:
-      uri: mongodb://k8s-mongodb-service:27017/patient_db # Replace with your Kubernetes MongoDB service URI
-  cloud:
-    consul:
-      host: consul-service # Replace with the Consul service name in Kubernetes
-      port: 8500
-      discovery:
-        service-name: ${spring.application.name}
-        health-check-path: /actuator/health
-        health-check-interval: 5s
-      config:
-        enabled: true
-        default-context: k8s-context
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
+logging:
+  level:
+    org.springframework.security: DEBUG
