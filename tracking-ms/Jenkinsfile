@@ -10,6 +10,12 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials for Docker Hub
         DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
         DOCKER_TAG = '0.0.6'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
+
+        // SonarScanner configuration
+        SONAR_TOKEN = credentials('sonar-token') // SonarCloud token stored in Jenkins credentials
+        SONAR_ORGANIZATION = 'devolpex'
+        SONAR_PROJECT_KEY = 'Devolpex_cognitive-finder'
+        SONAR_HOST_URL = 'https://sonarcloud.io'
     }
 
     stages {
@@ -23,6 +29,21 @@ pipeline {
             steps {
                 dir('tracking-ms') {
                     sh 'mvn test'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('tracking-ms') {
+                    sh """
+                        sonar-scanner \
+                          -Dsonar.organization=${SONAR_ORGANIZATION} \
+                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=${SONAR_HOST_URL} \
+                          -Dsonar.login=${SONAR_TOKEN}
+                    """
                 }
             }
         }
