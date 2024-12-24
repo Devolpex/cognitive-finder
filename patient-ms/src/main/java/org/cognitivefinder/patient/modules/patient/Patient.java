@@ -19,6 +19,6 @@ public class Patient {
     private String id;
     private String name;
     private String maladie;
-    private Long clientId;
+    private String clientId;
     
 }

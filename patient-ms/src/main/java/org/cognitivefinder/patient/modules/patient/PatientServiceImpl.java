@@ -6,8 +6,10 @@ import org.cognitivefinder.patient.errors.exception.BusinessException;
 import org.cognitivefinder.patient.modules.device.DeviceDTO;
 import org.cognitivefinder.patient.modules.device.DeviceREQ;
 import org.cognitivefinder.patient.modules.device.DeviceService;
+import org.cognitivefinder.patient.modules.patient.dto.ClientDTO;
 import org.cognitivefinder.patient.modules.patient.dto.PatientDTO;
 import org.cognitivefinder.patient.modules.patient.http.PatientREQ;
+import org.cognitivefinder.patient.security.AuthService;
 import org.cognitivefinder.patient.utils.IService;
 import org.cognitivefinder.patient.utils.OwnPageRES;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +27,17 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
     private final PatientRepository repository;
     private final PatientMapperImpl mapper;
     private final DeviceService deviceService;
+    private final AuthService authService;
 
     @Override
     public PatientDTO create(PatientREQ req) {
         // TODO: Check if the client exists
+        String userID = authService.getAuthenticatedUserId();
 
         Patient patient = Patient.builder()
                 .name(req.name())
                 .maladie(req.maladie())
+                .clientId(userID)
                 .build();
         patient = repository.save(patient);
 
@@ -43,8 +48,11 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                 .build();
         DeviceDTO deviceDTO = deviceService.createDevice(deviceREQ);
         PatientDTO patientDTO = mapper.toDTO(patient);
+        ClientDTO client = ClientDTO.builder()
+                .id(userID)
+                .build();
         patientDTO.setDevice(deviceDTO);
-
+        patientDTO.setClient(client);
         return patientDTO;
     }
 
@@ -128,6 +136,15 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                     patientDTO.setDevice(deviceDTO);
                     return patientDTO;
                 })
+                .toList();
+    }
+
+    /**
+     * Service to get list of patients ids by client id
+     */
+    public List<String> findAllByClientId(String clientId) {
+        return repository.findAllByClientId(clientId).stream()
+                .map(Patient::getId)
                 .toList();
     }
 }

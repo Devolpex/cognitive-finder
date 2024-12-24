@@ -34,6 +34,11 @@ spring:
         format: yaml
         default-context: application
         profile-separator: "-"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:http://localhost:8181/realms/COG}
 
 management:
   endpoints:
@@ -44,8 +49,13 @@ management:
 
 # Traccar 
 traccar:
-  api: ${TRACCAR_API:http://35.181.167.167:8082/api}
+  api: ${TRACCAR_API:http://15.237.197.214:8082/api}
   user: ${TRACCAR_USER:admin}
   password: ${TRACCAR_PASSWORD:admin}
-  ws: ${TRACCAR_WS:ws://35.181.167.167:8082/api/socket}
+  ws: ${TRACCAR_WS:ws://15.237.197.214:8082/api/socket}
 # Test Jenkins for docker
+
+# Logging
+logging:
+  level:
+    org.springframework.security: DEBUG
