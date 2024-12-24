@@ -31,13 +31,16 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
+                dir('tracking-ms') {
+                    withSonarQubeEnv('sonarqube-server') {
                         sh """
                             ${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectName=cognitive-finder\
-                            -Dsonar.projectKey=cognitive-finder \
+                            -Dsonar.projectName=tracking-ms \
+                            -Dsonar.projectKey=tracking-ms \
                             -Dsonar.sources=. \
+                            -Dsonar.java.binaries=target/classes
                         """
+                    }
                 }
             }
         }
