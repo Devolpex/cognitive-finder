@@ -28,7 +28,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(helloWebSocketHandler, "/ws/hello")
                 .addHandler(positionWebSocketHandler, "/ws/position")
-                .setAllowedOrigins("*")
+                .setAllowedOrigins("http://localhost:4200")
                 .addInterceptors(new KeycloakAuthHandshakeInterceptor(jwtDecoder));
     }
 }
