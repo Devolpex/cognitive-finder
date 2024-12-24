@@ -1,0 +1,42 @@
+# Default Profile
+server:
+  port: 8882
+
+spring:
+  application:
+    name: patient-microservice
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://patient_user:patient_password@localhost:27020/patient_db}
+  jpa:
+    hibernate:
+      ddl-auto: none
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        service-name: ${spring.application.name}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+      config:
+        enabled: false
+        format: yaml
+        default-context: application
+        profile-separator: "-"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:http://localhost:8181/realms/COG}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG

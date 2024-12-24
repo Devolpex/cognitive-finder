@@ -1,0 +1,61 @@
+# Default Profile
+server:
+  port: 8883
+spring:
+  application:
+    name: tracking-microservice
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tracking_ms_db}
+    username: ${SPRING_DATASOURCE_USERNAME:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    baseline-description: "init"
+    baseline-version: 0
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        service-name: ${spring.application.name}
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+      config:
+        enabled: false
+        format: yaml
+        default-context: application
+        profile-separator: "-"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${ISSUER_URI:http://localhost:8181/realms/COG}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+
+# Traccar 
+traccar:
+  api: ${TRACCAR_API:http://15.237.197.214:8082/api}
+  user: ${TRACCAR_USER:admin}
+  password: ${TRACCAR_PASSWORD:admin}
+  ws: ${TRACCAR_WS:ws://15.237.197.214:8082/api/socket}
+# Test Jenkins for docker
+
+# Logging
+logging:
+  level:
+    org.springframework.security: DEBUG
