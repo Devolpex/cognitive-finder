@@ -3,20 +3,15 @@ pipeline {
     tools{
         jdk 'JDK21'
         maven 'maven-3.8.7'
-        sonarScanner 'sonarqube-scanner'
     }
 
     environment {
-        // Define Docker Hub credentials and repository details
         DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials for Docker Hub
         DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
         DOCKER_TAG = '0.0.6'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
 
         // SonarScanner configuration
-        SONAR_TOKEN = credentials('sonar-token') // SonarCloud token stored in Jenkins credentials
-        SONAR_ORGANIZATION = 'devolpex'
-        SONAR_PROJECT_KEY = 'Devolpex_cognitive-finder'
-        SONAR_HOST_URL = 'https://sonarcloud.io'
+        SCANNER_HOME = tool 'sonarqube-scanner'
     }
 
     stages {
@@ -36,32 +31,24 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('tracking-ms') {
-                    sh """
-                        sonar-scanner \
-                          -Dsonar.organization=${SONAR_ORGANIZATION} \
-                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=${SONAR_HOST_URL} \
-                          -Dsonar.login=${SONAR_TOKEN}
-                    """
+                withSonarQubeEnv('sonarqube') {
+                        sh """
+                            ${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=cognitive-finder\
+                            -Dsonar.projectKey=cognitive-finder \
+                            -Dsonar.sources=. \
+                        """
                 }
             }
         }
-
-
         stage('Quality Gate') {
             steps {
                 script {
-                    timeout(time: 1, unit: 'MINUTES') {
-                        def qualityGate = waitForQualityGate()
-                        if (qualityGate.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
-                        }
-                    }
+                  waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-server' 
                 }
             }
         }
+        
 
         stage('Build JAR') {
             steps {
