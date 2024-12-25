@@ -32,7 +32,7 @@ Cognitive disorders, such as Alzheimer's disease, pose significant challenges to
 
 2. Set up Docker containers for services:
    ```bash
-   docker-compose -f docker/compose.yml up -d
+   docker compose compose.yml up -d
    ```
 
 3. Start the frontend applications:
@@ -42,15 +42,15 @@ Cognitive disorders, such as Alzheimer's disease, pose significant challenges to
      npm install
      ng serve
      ```
-   - Flutter frontend:
+   <!-- - Flutter frontend:
      ```bash
      cd frontend/flutter-app
      flutter run
-     ```
+     ``` -->
 
 4. Access the system through the web interface:
    - **Angular**: Navigate to `http://localhost:4200`
-   - **Flutter**: Access via mobile or emulator.
+   <!-- - **Flutter**: Access via mobile or emulator. -->
 
 ## Structure of Repositories
 
@@ -63,7 +63,7 @@ cognitive-finder/
 ├── compose.yml                 # Docker Compose file for container orchestration
 ├── docker/                     # Docker-related files
 ├── docs/                       # Documentation files
-├── frontend/                   # Frontend code (Angular & Flutter)
+├── frontend/                   # Frontend code (Angular)
 ├── lib/                        # Shared libraries used by multiple microservices
 ├── notification-ms/            # Notification microservice for alerts
 ├── patient-ms/                 # Patient management microservice
@@ -92,8 +92,40 @@ This system uses a microservices architecture, where each service is responsible
 - **Tracking Service**: Processes GPS data and triggers alerts.
 - **Notification Service**: Sends notifications to caregivers.
 - **User Service**: Handles user registration and authentication.
+<div align="center">
+  <img src="images/microservices-architecture.png" alt="Alt text" width="500">
+</div>
+
+### Backend Architecture
+
+The backend architecture is designed to maintain a clean separation of concerns, ensuring flexibility, security, and scalability. It is divided into three primary layers:
+<div align="center">
+  <img src="images/backend-architecture.png" alt="Alt text" width="">
+</div>
+
+#### 1. Controller Layer
+This layer serves as the entry point for handling incoming requests. It integrates **Keycloak** to manage authentication and authorization, ensuring that only authorized users can access specific resources. The controllers communicate with the business layer via **EntityService**, which implements the **IServiceLayer** interface to process business logic effectively.
+
+#### 2. Business Layer
+The core logic of the system resides here. It utilizes **EntityMapper** to handle the transformation of **Data Transfer Objects (DTOs)**, ensuring seamless interaction between the controller and entity layers. This layer is responsible for validating, processing, and preparing data before it reaches the underlying entity layer.
+
+#### 3. Entity Layer
+This layer manages database interactions through **EntityRepository**, which is responsible for querying and manipulating data directly from the database.
+
+
+*This architecture is built with a strong focus on safeguarding data, maintaining precision, and promoting maintainability. By isolating responsibilities across layers and implementing stringent authorization checks, it provides a flexible and secure foundation for protecting entities and ensuring system integrity.*
+
+### Domain-Driven Design (DDD)
+
+Domain-Driven Design (DDD) is a methodology that emphasizes the importance of the domain (the problem space) and the business logic when developing software. It helps developers and stakeholders collaborate effectively by creating a shared understanding of the business domain.
+<div align="center">
+  <img src="images/DDD.png" alt="Alt text" width="">
+</div>
 
 ### CI/CD Pipeline
+<div align="center">
+  <img src="images/pipeline.png" alt="Alt text" width="">
+</div>
 
 The CI/CD pipeline automates the process of building, testing, and deploying the application. Each time code is pushed to the repository, Jenkins triggers the pipeline:
 
@@ -104,6 +136,9 @@ The CI/CD pipeline automates the process of building, testing, and deploying the
 5. **Deploy**: Deploy the application using Kubernetes and Docker Compose.
 
 ### Cloud Architecture
+<div align="center">
+  <img src="images/cloud-architecture.png" alt="Alt text" width="">
+</div>
 
 The system is hosted on a cloud infrastructure using Kubernetes for container orchestration. It employs a Virtual Private Cloud (VPC) with subnets for different services (e.g., Kubernetes nodes, Jenkins server). The cloud setup ensures high availability and scalability.
 
