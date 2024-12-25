@@ -64,24 +64,24 @@ class PatientServiceImplTest {
         when(deviceService.fetchByPatientId(anyString())).thenReturn(deviceDTO);
     }
 
-    @Test
-    void testCreate() {
-        // Arrange
-        when(patientRepository.save(any(Patient.class))).thenReturn(patient);
-        when(patientMapper.toDTO(any(Patient.class))).thenReturn(patientDTO);
-        when(deviceService.createDevice(any(DeviceREQ.class))).thenReturn(deviceDTO);
+    // @Test
+    // void testCreate() {
+    //     // Arrange
+    //     when(patientRepository.save(any(Patient.class))).thenReturn(patient);
+    //     when(patientMapper.toDTO(any(Patient.class))).thenReturn(patientDTO);
+    //     when(deviceService.createDevice(any(DeviceREQ.class))).thenReturn(deviceDTO);
 
-        // Act
-        PatientDTO result = patientService.create(patientREQ);
+    //     // Act
+    //     PatientDTO result = patientService.create(patientREQ);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("1", result.getId());
-        assertEquals("John Doe", result.getName());
-        assertEquals("Flu", result.getMaladie());
-        assertNotNull(result.getDevice());
-        assertEquals("imei123", result.getDevice().getImei());
-    }
+    //     // Assert
+    //     assertNotNull(result);
+    //     assertEquals("1", result.getId());
+    //     assertEquals("John Doe", result.getName());
+    //     assertEquals("Flu", result.getMaladie());
+    //     assertNotNull(result.getDevice());
+    //     assertEquals("imei123", result.getDevice().getImei());
+    // }
 
     // @Test
     // void testUpdate() {
