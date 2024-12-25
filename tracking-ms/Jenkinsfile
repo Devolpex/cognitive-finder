@@ -8,7 +8,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials for Docker Hub
         DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
-        DOCKER_TAG = '0.0.8'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
+        DOCKER_TAG = 'latest'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
 
         // SonarScanner configuration
         SCANNER_HOME = tool 'sonarqube-scanner'
@@ -97,26 +97,16 @@ pipeline {
                 script {
                     // SSH to the server and run commands
                     sh """
-                    # Copy the production-jenkins folder to the server
-                    scp -o StrictHostKeyChecking=no -r -i \${SSH_KEY} ${WORKSPACE}/production ${SSH_USER}@${SERVER_IP}:/home/ubuntu/new-production || exit 1
-
                     # SSH into the server to perform deployment steps
                     ssh -o StrictHostKeyChecking=no -i \${SSH_KEY} ${SSH_USER}@${SERVER_IP} << EOF
                     echo 'Shutting down Docker Compose containers...'
                     cd /home/ubuntu/production || exit 1
+                    echo 'Stopping Docker Compose...'
                     docker compose down || exit 1
-
-                    echo 'Deleting old production folder and renaming production-jenkins...'
-                    rm -rf /home/ubuntu/production || exit 1
-                    mv /home/ubuntu/new-production /home/ubuntu/production || exit 1
-
-                    echo 'Pulling the latest images...'
-                    cd /home/ubuntu/production || exit 1
+                    echo 'Pulling Docker Compose...'
                     docker compose pull || exit 1
-
                     echo 'Starting Docker Compose...'
                     docker compose up -d || exit 1
-
                     exit
                     EOF
                     """
