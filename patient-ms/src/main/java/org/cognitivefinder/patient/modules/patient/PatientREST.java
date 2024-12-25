@@ -73,4 +73,9 @@ public class PatientREST implements IRESTController<PatientDTO, PatientREQ, Pati
         return ResponseEntity.ok(patientService.findAllByClientId(clientId));
     }
 
+    /**
+     * Test Jenkins
+     */
+
+
 }
