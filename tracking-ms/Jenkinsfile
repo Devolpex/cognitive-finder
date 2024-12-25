@@ -1,0 +1,129 @@
+pipeline {
+    agent any
+    tools{
+        jdk 'JDK21'
+        maven 'maven-3.8.7'
+    }
+
+    environment {
+        DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials for Docker Hub
+        DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
+        DOCKER_TAG = '0.0.8'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
+
+        // SonarScanner configuration
+        SCANNER_HOME = tool 'sonarqube-scanner'
+
+        // Server configuration
+        SERVER_IP = '15.237.197.214'
+        SSH_USER = 'ubuntu' // SSH username
+        SSH_KEY = credentials('ubuntu-server')
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'dev', credentialsId: 'github', url: 'https://github.com/Devolpex/cognitive-finder'
+            }
+        }
+        
+        stage('Run Tests') {
+            steps {
+                dir('tracking-ms') {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('tracking-ms') {
+                    withSonarQubeEnv('sonarqube') {
+                        sh """
+                            ${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=tracking-ms \
+                            -Dsonar.projectKey=tracking-ms \
+                            -Dsonar.sources=. \
+                            -Dsonar.java.binaries=target/classes
+                        """
+                    }
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                script {
+                  waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-server' 
+                }
+            }
+        }
+        
+
+        stage('Build JAR') {
+            steps {
+                dir('tracking-ms') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('tracking-ms') {
+                    script {
+                        sh """
+                            docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    // Login to Docker Hub (using Jenkins credentials)
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                            docker push ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                script {
+                    // SSH to the server and run commands
+                    sh """
+                    # Copy the production-jenkins folder to the server
+                    scp -o StrictHostKeyChecking=no -r -i \${SSH_KEY} ${WORKSPACE}/production ${SSH_USER}@${SERVER_IP}:/home/ubuntu/new-production || exit 1
+
+                    # SSH into the server to perform deployment steps
+                    ssh -o StrictHostKeyChecking=no -i \${SSH_KEY} ${SSH_USER}@${SERVER_IP} << EOF
+                    echo 'Shutting down Docker Compose containers...'
+                    cd /home/ubuntu/production || exit 1
+                    docker compose down || exit 1
+
+                    echo 'Deleting old production folder and renaming production-jenkins...'
+                    rm -rf /home/ubuntu/production || exit 1
+                    mv /home/ubuntu/new-production /home/ubuntu/production || exit 1
+
+                    echo 'Pulling the latest images...'
+                    cd /home/ubuntu/production || exit 1
+                    docker compose pull || exit 1
+
+                    echo 'Starting Docker Compose...'
+                    docker compose up -d || exit 1
+
+                    exit
+                    EOF
+                    """
+                }
+            }
+}
+
+
+    }
+}
