@@ -19,5 +19,5 @@ public class LocalisationREST {
     public List<PositionResponseTRC> getPositionsByClientId(@PathVariable("clientId") String clientId) {
         return locationService.getPositionsByClientId(clientId);
     }
-
+    
 }

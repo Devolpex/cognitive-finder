@@ -13,7 +13,7 @@ import { PositionService } from '../services/position/position.service';
 })
 export class PatientMapComponent implements OnInit, OnDestroy {
   private map: L.Map | undefined;
-  private marker: L.Marker | undefined;
+  private markers: L.Marker[] = [];
   private subscription: Subscription | undefined;
   positionData: PositionResponseTRC[] = [];
 
@@ -32,17 +32,13 @@ export class PatientMapComponent implements OnInit, OnDestroy {
     // Call the API every 10 seconds
     this.subscription = interval(10000)
       .pipe(
-
         switchMap(() => this.positionService.getPositionsByClientId(clientId)) // Send clientId from Keycloak
       )
       .subscribe({
         next: (data) => {
           this.positionData = data;
           console.log('Position updated:', data);
-          if (data.length > 0) {
-            // Update the marker with the first position
-            this.updateMarkerPosition(data[0].latitude, data[0].longitude);
-          }
+          this.updateMarkers(data);
         },
         error: (error) => {
           console.error('Error fetching position:', error);
@@ -68,16 +64,21 @@ export class PatientMapComponent implements OnInit, OnDestroy {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
-
-    // Add the marker
-    this.marker = L.marker([51.505, -0.09]).addTo(this.map);
   }
 
-  private updateMarkerPosition(lat: number, lng: number): void {
-    if (this.marker) {
-      // Update the marker position and center the map on the new position
-      this.marker.setLatLng([lat, lng]);
-      this.map?.setView([lat, lng], 13);
-    }
+  private updateMarkers(positions: PositionResponseTRC[]): void {
+    // Remove existing markers
+    this.markers.forEach(marker => this.map?.removeLayer(marker));
+    this.markers = [];
+
+    // Add new markers for each position
+    positions.forEach(position => {
+      const marker = L.marker([position.latitude, position.longitude]).addTo(this.map!);
+      this.markers.push(marker);
+    });
+
+    // Optionally, you can fit the map view to the markers
+    const group = L.featureGroup(this.markers);
+    this.map?.fitBounds(group.getBounds());
   }
 }

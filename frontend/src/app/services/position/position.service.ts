@@ -7,7 +7,7 @@ import { PositionResponseTRC } from '../../types/PositionResponseTRC';
   providedIn: 'root',
 })
 export class PositionService {
-  private apiUrl = 'http://localhost:8883/api/v1/positions/client'; // Replace with your actual API URL
+  private apiUrl = 'http://localhost:8080/api/v1/positions/client'; // Replace with your actual API URL
 
   constructor(private http: HttpClient) {}
 
