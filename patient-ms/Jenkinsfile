@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIALS_ID = 'docker'  // Jenkins credentials for Docker Hub
-        DOCKER_IMAGE_NAME = 'devolpex/cog-tracking-ms'  // Docker image name (change to your repo)
+        DOCKER_IMAGE_NAME = 'devolpex/cog-patient-ms'  // Docker image name (change to your repo)
         DOCKER_TAG = 'latest'  // Docker image tag, change as necessary (e.g., use build number or commit hash)
 
         // SonarScanner configuration
@@ -28,7 +28,7 @@ pipeline {
         
         stage('Run Tests') {
             steps {
-                dir('tracking-ms') {
+                dir('patient-ms') {
                     sh 'mvn test'
                 }
             }
@@ -36,12 +36,12 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('tracking-ms') {
+                dir('patient-ms') {
                     withSonarQubeEnv('sonarqube') {
                         sh """
                             ${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectName=tracking-ms \
-                            -Dsonar.projectKey=tracking-ms \
+                            -Dsonar.projectName=patient-ms \
+                            -Dsonar.projectKey=patient-ms \
                             -Dsonar.sources=. \
                             -Dsonar.java.binaries=target/classes
                         """
@@ -60,7 +60,7 @@ pipeline {
 
         stage('Build JAR') {
             steps {
-                dir('tracking-ms') {
+                dir('patient-ms') {
                     sh 'mvn clean package'
                 }
             }
@@ -68,7 +68,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('tracking-ms') {
+                dir('patient-ms') {
                     script {
                         sh """
                             docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
