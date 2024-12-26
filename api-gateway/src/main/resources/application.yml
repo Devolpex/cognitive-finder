@@ -6,16 +6,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8181/realms/cognitivefinder
+          issuer-uri: ${ISSUER_URI:http://localhost:8181/realms/COG}
   application:
     name: api-gateway
   cloud:
-    gateway:
-      routes:
-        - id: user-microservice
-          uri: lb://user-microservice
-          predicates:
-            - Path=/api/test/**
     consul:
       host: localhost
       port: 8500
@@ -34,8 +28,13 @@ management:
       exposure:
         include: health,info
 
-jwt:
-  auth:
-    converter:
-      resource-id: api-gateway
-      principle-attribute: preferred_username
+# jwt:
+#   auth:
+#     converter:
+#       resource-id: api-gateway
+#       principle-attribute: preferred_username
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG

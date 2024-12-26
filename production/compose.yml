@@ -91,7 +91,7 @@ services:
   # Tracking Microservice
   tracking-microservice:
     container_name: cog_tracking_microservice
-    image: devolpex/cog-tracking-ms:0.0.5
+    image: devolpex/cog-tracking-ms:latest
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://cog_postgresql:5432/tracking_ms_db
       SPRING_DATASOURCE_USERNAME: user
@@ -114,7 +114,7 @@ services:
   # Patient Microservice
   patient-microservice:
     container_name: cog_patient_microservice
-    image: devolpex/cog-patient-ms:0.0.1
+    image: devolpex/cog-patient-ms:latest
     environment:
       MONGODB_URI: mongodb://patient_user:patient_password@mongodb:27017/patient_db
       CONSUL_HOST: cog_consul
