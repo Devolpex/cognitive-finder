@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface PatientService {
 
     @GetMapping("/api/v1/patients-ids/client/{clientId}")
-    List<String> fetchPatientIdsByClientId(@RequestHeader("Authorization") String token,@PathVariable("clientId") String clientId);
+    List<String> fetchPatientIdsByClientId(@PathVariable("clientId") String clientId);
 
 }
