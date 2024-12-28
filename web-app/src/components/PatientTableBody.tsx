@@ -10,6 +10,8 @@ import { usePatient } from "../context/PatientProvider";
 import { IPatient } from "../types/patient";
 import { PencilIcon } from "@heroicons/react/16/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
+import { MapIcon } from "@heroicons/react/24/solid";
 
 // export interface IPatientTableBodyProps {}
 
@@ -17,14 +19,16 @@ export function PatientTableBody() {
   const headers = [
     "Patient Name",
     "Maladie",
-    "Client Name",
-    "Client Email",
+    // "Client Name",
+    // "Client Email",
     "Device IMEI",
     "Device SIM",
     "Actions",
   ];
 
   const { patients, fetchPatientsList, deleteModal } = usePatient();
+  const navigate = useNavigate();
+
 
   React.useEffect(() => {
     fetchPatientsList();
@@ -42,6 +46,10 @@ export function PatientTableBody() {
     console.log("Delete", id);
     setIID({ fetchID: "", deleteID: id, updateID: "" });
     deleteModal.openModal();
+  };
+
+  const navigateToPatientMap = (id: string) => {
+    navigate(`/patient/map/${id}`);
   };
 
   return (
@@ -104,7 +112,7 @@ export function PatientTableBody() {
                     {patient.maladie}
                   </Typography>
                 </td>
-                <td className={classes}>
+                {/* <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
@@ -127,7 +135,7 @@ export function PatientTableBody() {
                   >
                     {patient.client?.email}
                   </Typography>
-                </td>
+                </td> */}
                 <td className={classes}>
                   <Typography
                     variant="small"
@@ -174,6 +182,17 @@ export function PatientTableBody() {
                         onClick={() => handleDelete(patient.id)}
                       >
                         <TrashIcon className="h-4 w-4" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content="View on Map">
+                      <IconButton
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                        color="blue"
+                        onClick={() => navigateToPatientMap(patient.id)}
+                      >
+                        <MapIcon className="h-4 w-4" />
                       </IconButton>
                     </Tooltip>
                   </div>

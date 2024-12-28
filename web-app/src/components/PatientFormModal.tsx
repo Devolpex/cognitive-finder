@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Button,
   Dialog,
@@ -15,19 +14,35 @@ import {
   updatePatientAPI,
 } from "../services/PatientService";
 import { IPatient, IPatientREQ } from "../types/patient";
-import React from "react";
+import React, { useState } from "react";
 
 export function PatientFormModal() {
   const { formModal } = usePatient();
   const { request, setRequest } = usePatient();
-  const [btnLoading, setBtnLoading] = React.useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
   const { setMessage } = usePatient();
   const { setIID, IID } = usePatient();
-  const {fetchPatientsList} = usePatient();
+  const { fetchPatientsList } = usePatient();
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const onSubmit = () => {
     setRequest({ ...request, clientId: localStorage.getItem("userId") || "" });
     console.log("Request", request);
+
+    // Validate inputs
+    const validationErrors: { [key: string]: string } = {};
+    if (!request.name) validationErrors.name = "Name of patient is required";
+    if (!request.deviceImei)
+      validationErrors.deviceImei = "Device IMEI is required";
+    if (!request.clientId) validationErrors.clientId = "Client ID is required";
+    if (!request.deviceNumber)
+      validationErrors.deviceNumber = "Device number is required";
+
+    setErrors(validationErrors);
+
+    // If there are validation errors, do not submit
+    if (Object.keys(validationErrors).length > 0) return;
+
     if (IID.updateID) {
       updatePatient(IID.updateID, request);
     } else {
@@ -54,15 +69,13 @@ export function PatientFormModal() {
       })
       .catch((err) => {
         console.log("error", err);
-        // TODO: display error message
+        // Handle error response here if necessary
       })
       .finally(() => {
-        console.log("finally");
         setBtnLoading(false);
       });
   };
 
-  // Fetch by id
   const fetchById = async (id: string) => {
     console.log("fetch by id", id);
     fetchPatientByIdAPI(id)
@@ -81,7 +94,6 @@ export function PatientFormModal() {
       });
   };
 
-  // Update the patient
   const updatePatient = async (id: string, req: IPatientREQ) => {
     console.log("update patient");
     setBtnLoading(true);
@@ -103,12 +115,10 @@ export function PatientFormModal() {
         console.log("error", err);
       })
       .finally(() => {
-        console.log("finally");
         setBtnLoading(false);
       });
   };
 
-  // Set the userId from the localStorage to the request object
   React.useEffect(() => {
     setRequest({ ...request, clientId: localStorage.getItem("userId") || "" });
     console.log("Update ID", IID.updateID);
@@ -158,6 +168,8 @@ export function PatientFormModal() {
           >
             Enter your patient details
           </Typography>
+
+          {/* Patient Name */}
           <Typography
             className="-mb-2"
             variant="h6"
@@ -170,12 +182,26 @@ export function PatientFormModal() {
           <Input
             label="Patient Name"
             size="lg"
+            value={request.name}
+            onChange={(e) => setRequest({ ...request, name: e.target.value })}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
             crossOrigin={undefined}
-            value={request.name}
-            onChange={(e) => setRequest({ ...request, name: e.target.value })}
+            error={errors.name ? true : false}  // Add conditional error prop
+
           />
+          {errors.name && (
+            <Typography
+              className="text-red-500 text-sm"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              {errors.name}
+            </Typography>
+          )}
+
+          {/* Patient Maladie */}
           <Typography
             className="-mb-2"
             variant="h6"
@@ -188,14 +214,28 @@ export function PatientFormModal() {
           <Input
             label="Patient Maladie"
             size="lg"
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-            crossOrigin={undefined}
             value={request.maladie}
             onChange={(e) =>
               setRequest({ ...request, maladie: e.target.value })
             }
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+            crossOrigin={undefined}
+            error={errors.maladie ? true : false}  // Add conditional error prop
+
           />
+          {errors.maladie && (
+            <Typography
+              className="text-red-500 text-sm"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              {errors.maladie}
+            </Typography>
+          )}
+
+          {/* Device Imei */}
           <Typography
             className="-mb-2"
             variant="h6"
@@ -208,14 +248,27 @@ export function PatientFormModal() {
           <Input
             label="Device Imei"
             size="lg"
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-            crossOrigin={undefined}
             value={request.deviceImei}
             onChange={(e) =>
               setRequest({ ...request, deviceImei: e.target.value })
             }
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+            crossOrigin={undefined}
+            error={errors.deviceImei ? true : false}  // Add conditional error prop
           />
+          {errors.deviceImei && (
+            <Typography
+              className="text-red-500 text-sm"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              {errors.deviceImei}
+            </Typography>
+          )}
+
+          {/* Device Number */}
           <Typography
             className="-mb-2"
             variant="h6"
@@ -228,14 +281,26 @@ export function PatientFormModal() {
           <Input
             label="Device Number"
             size="lg"
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
-            crossOrigin={undefined}
             value={request.deviceNumber}
             onChange={(e) =>
               setRequest({ ...request, deviceNumber: e.target.value })
             }
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+            crossOrigin={undefined}
+            error={errors.deviceNumber ? true : false}  // Add conditional error prop
+
           />
+          {errors.deviceNumber && (
+            <Typography
+              className="text-red-500 text-sm"
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+            >
+              {errors.deviceNumber}
+            </Typography>
+          )}
         </CardBody>
         <CardFooter
           className="pt-0"
