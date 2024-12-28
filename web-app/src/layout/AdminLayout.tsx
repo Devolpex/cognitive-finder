@@ -7,7 +7,7 @@ export interface IAdminLayoutProps {}
 
 export function AdminLayout(props: IAdminLayoutProps) {
   return (
-    <div className="flex min-h-screen py-4 px-4 bg-blue-gray-50 w-full h-auto gap-4">
+    <div className="flex min-h-screen py-4 px-4 bg-blue-gray-50 w-full h-screen gap-4">
       {/* Sidebar */}
       <Sidebar />
       

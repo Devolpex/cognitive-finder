@@ -13,24 +13,27 @@ import {
   UserCircleIcon,
   PowerIcon,
   UserGroupIcon,
+  MapIcon,
 } from "@heroicons/react/24/solid";
+import { useKeycloak } from "../context/KeycloakProvider";
 
 // Define a menuItems array with name, path, and icon
 const menuItems = [
   {
     title: "Patients",
     icon: UserGroupIcon,
-    path: "/admin/patient",
+    path: "/patient",
   },
   {
-    title: "Profile",
-    icon: UserCircleIcon,
-    path: "/profile",
+    title: "Map",
+    icon: MapIcon,
+    path: "/map",
   },
   {
     title: "Log Out",
     icon: PowerIcon,
-    path: "/logout",
+    path: "/logout", // You could keep this path as a placeholder, but we won't be navigating to it.
+    isLogout: true, // Add a flag to identify the logout item
   },
 ];
 
@@ -40,6 +43,14 @@ export function Sidebar() {
   // Function to handle navigation
   const handleNavigation = (path: string) => {
     navigate(path); // Navigate to the specified path
+  };
+  const { logout } = useKeycloak(); // Get the keycloak object from the context
+
+  // on Sign Out, clear the local storage, log out using Keycloak, and navigate
+  const handleSignOut = () => {
+    localStorage.clear();
+    logout(); // Log out using Keycloak
+    navigate("/"); // Navigate to the homepage or login page
   };
 
   return (
@@ -69,7 +80,13 @@ export function Sidebar() {
         {menuItems.map((item) => (
           <ListItem
             key={item.title}
-            onClick={() => handleNavigation(item.path)} // Add the click handler to navigate
+            onClick={() => {
+              if (item.isLogout) {
+                handleSignOut(); // Call handleSignOut for logout
+              } else {
+                handleNavigation(item.path); // Navigate normally for other items
+              }
+            }}
             className="cursor-pointer"
             placeholder={undefined}
             onPointerEnterCapture={undefined}

@@ -4,6 +4,7 @@ import Keycloak from 'keycloak-js';
 interface KeycloakContextType {
   keycloak: Keycloak | null;
   authenticated: boolean;
+  logout: () => void;
 }
 
 const KeycloakContext = createContext<KeycloakContextType | null>(null);
@@ -33,8 +34,13 @@ export const KeycloakProvider = ({ keycloak, children }: { keycloak: Keycloak, c
     };
   }, [keycloak]);
 
+  // logout function
+  const logout = () => {
+    keycloak.logout();
+  };
+
   return (
-    <KeycloakContext.Provider value={{ keycloak, authenticated }}>
+    <KeycloakContext.Provider value={{ keycloak, authenticated, logout }}>
       {children}
     </KeycloakContext.Provider>
   );

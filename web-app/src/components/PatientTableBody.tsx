@@ -19,8 +19,8 @@ export function PatientTableBody() {
   const headers = [
     "Patient Name",
     "Maladie",
-    "Client Name",
-    "Client Email",
+    // "Client Name",
+    // "Client Email",
     "Device IMEI",
     "Device SIM",
     "Actions",
@@ -49,7 +49,7 @@ export function PatientTableBody() {
   };
 
   const navigateToPatientMap = (id: string) => {
-    navigate(`/admin/patient/map/${id}`);
+    navigate(`/patient/map/${id}`);
   };
 
   return (
@@ -112,7 +112,7 @@ export function PatientTableBody() {
                     {patient.maladie}
                   </Typography>
                 </td>
-                <td className={classes}>
+                {/* <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
@@ -135,7 +135,7 @@ export function PatientTableBody() {
                   >
                     {patient.client?.email}
                   </Typography>
-                </td>
+                </td> */}
                 <td className={classes}>
                   <Typography
                     variant="small"
