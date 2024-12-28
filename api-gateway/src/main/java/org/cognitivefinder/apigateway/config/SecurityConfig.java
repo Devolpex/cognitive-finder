@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 // .requestMatchers(HttpMethod.PUT, "/api/v1/patient/{id}").hasRole(CLIENT)
                                 // .requestMatchers(HttpMethod.DELETE, "/api/v1/patient/{id}").hasAnyRole(ADMIN, CLIENT)
                                 .requestMatchers("/**").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                                 // Positions Endpoints
                                 // .requestMatchers(HttpMethod.GET, "/api/v1/positions/client/{clientId}").hasRole(CLIENT)
