@@ -142,4 +142,19 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                 .map(Patient::getId)
                 .toList();
     }
+
+
+    /**
+     * Service to fetch pations informations by client Id
+     */
+    public List<PatientDTO> fetchByClientId(String clientId) {
+        return repository.findAllByClientId(clientId).stream()
+                .map(patient -> {
+                    DeviceDTO deviceDTO = deviceService.fetchByPatientId(patient.getId());
+                    PatientDTO patientDTO = mapper.toDTO(patient);
+                    patientDTO.setDevice(deviceDTO);
+                    return patientDTO;
+                })
+                .toList();
+    }
 }

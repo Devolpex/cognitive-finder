@@ -77,8 +77,13 @@ public class PatientREST implements IRESTController<PatientDTO, PatientREQ, Pati
     }
 
     /**
-     * Test Jenkins
+     * Endpoint to fetch patients by client id
      */
+    @GetMapping("/api/v1/patients/client/{clientId}")
+    // @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<PatientDTO>> fetchPatientsByClientId(@PathVariable String clientId) {
+        return ResponseEntity.ok(patientService.fetchByClientId(clientId));
+    }
 
 
 }
