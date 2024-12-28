@@ -2,7 +2,6 @@ import 'package:cognitive_app/pages/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cognitive_app/Pages/profile/profil_page.dart';
 import 'package:cognitive_app/Services/auth_service.dart';

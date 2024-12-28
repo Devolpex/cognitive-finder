@@ -1,5 +1,6 @@
 import 'package:cognitive_app/pages/flottes/movements_page.dart';
 import 'package:cognitive_app/pages/notifications/notifications_page.dart';
+import 'package:cognitive_app/pages/patient/patient_page.dart';
 import 'package:cognitive_app/pages/profile/profil_page.dart';
 import 'package:cognitive_app/utils/colors.dart';
 import 'package:cognitive_app/Services/auth_service.dart';
@@ -34,7 +35,7 @@ class _LayoutPageState extends State<LayoutPage> with SingleTickerProviderStateM
       //     currentPage = 0; // Navigate back to MovementsPage
       //   });
       // }),
-      ProfilPage(accessToken: accessToken ?? ''),
+      PatientPage(accessToken: accessToken ?? ''),
       ProfilPage(accessToken: accessToken ?? ''),
       // MaintenancePage(),
       NotificationsPage(),

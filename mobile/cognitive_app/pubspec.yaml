@@ -49,6 +49,7 @@ dependencies:
   latlong2: ^0.9.1
   flutter_map: ^7.0.2
   flutter_dotenv: ^5.2.1
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

@@ -26,7 +26,7 @@ class _MovementsPageState extends State<MovementsPage> {
   // late DevicesController devicesController;
   // late PositionController positionController;
 
-  List<Marker> _markers = [];
+  final List<Marker> _markers = [];
 
   @override
   void initState() {

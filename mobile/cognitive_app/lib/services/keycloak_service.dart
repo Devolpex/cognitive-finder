@@ -16,4 +16,5 @@ class KeycloakService {
   static String? getFullName(Map<String, dynamic> tokenPayload) {
     return "${tokenPayload['given_name']} ${tokenPayload['family_name']}";
   }
+
 }
