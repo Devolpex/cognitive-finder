@@ -1,3 +1,5 @@
+import 'package:cognitive_app/pages/flottes/movements_page.dart';
+import 'package:cognitive_app/pages/notifications/notifications_page.dart';
 import 'package:cognitive_app/pages/profile/profil_page.dart';
 import 'package:cognitive_app/utils/colors.dart';
 import 'package:cognitive_app/Services/auth_service.dart';
@@ -25,7 +27,7 @@ class _LayoutPageState extends State<LayoutPage> with SingleTickerProviderStateM
 
   void _initPages() {
     pages = [
-      // const MovementsPage(),
+      MovementsPage(),
       // const DevicesPage(),
       // ReportsPage(onExploreMore: () {
       //   setState(() {
@@ -34,9 +36,8 @@ class _LayoutPageState extends State<LayoutPage> with SingleTickerProviderStateM
       // }),
       ProfilPage(accessToken: accessToken ?? ''),
       ProfilPage(accessToken: accessToken ?? ''),
-      ProfilPage(accessToken: accessToken ?? ''),
       // MaintenancePage(),
-      ProfilPage(accessToken: accessToken ?? ''),
+      NotificationsPage(),
       ProfilPage(accessToken: accessToken ?? ''),
       // ReservationPage(),
     ];

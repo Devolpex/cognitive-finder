@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:cognitive_app/Config/server_config.dart';
 import 'package:cognitive_app/Model/token_auth.dart';
+import 'package:cognitive_app/utils/keys.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
@@ -10,10 +10,9 @@ class AuthService {
 
   /// Login function to authenticate a user with their username and password.
   Future<Map<String, dynamic>> login(String username, String password) async {
-    logger.i('Logging in with username: $username and password: $password');
+    logger.i('Logging in with username: $username and password: $password at $keycloakBaseUrl');
     final url = Uri.parse(
         '$keycloakBaseUrl/realms/COG/protocol/openid-connect/token');
-
     try {
       final response = await http.post(
         url,
@@ -131,41 +130,41 @@ class AuthService {
     }
   }
 
-    Future<Map<String, dynamic>> registerBySpring(
-      String email, String username, String password) async {
-    logger.i('Registering with email: $email, username: $username');
-    final url = Uri.parse(
-        '$ipAdress/public/register');
+  //   Future<Map<String, dynamic>> registerBySpring(
+  //     String email, String username, String password) async {
+  //   logger.i('Registering with email: $email, username: $username');
+  //   final url = Uri.parse(
+  //       '$ipAdress/public/register');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'username': username,
-          'password': password,
-        }),
-      );
+  //   try {
+  //     final response = await http.post(
+  //       url,
+  //       headers: {'Content-Type': 'application/json'},
+  //       body: jsonEncode({
+  //         'email': email,
+  //         'username': username,
+  //         'password': password,
+  //       }),
+  //     );
 
-      if (response.statusCode == 200) {
-        logger.i('Registration Successful: ${response.statusCode}');
-        return login(username, password);
-      } else {
-        logger.e('Registration Failed: ${response.body}');
-        return {
-          "result": "error",
-          "message": response.body,
-        };
-      }
-    } catch (error) {
-      logger.e('An error occurred: $error');
-      return {
-        "result": "error",
-        "message": error,
-      };
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       logger.i('Registration Successful: ${response.statusCode}');
+  //       return login(username, password);
+  //     } else {
+  //       logger.e('Registration Failed: ${response.body}');
+  //       return {
+  //         "result": "error",
+  //         "message": response.body,
+  //       };
+  //     }
+  //   } catch (error) {
+  //     logger.e('An error occurred: $error');
+  //     return {
+  //       "result": "error",
+  //       "message": error,
+  //     };
+  //   }
+  // }
 
   Future<void> saveAuthToken(AuthToken authToken) async {
     var box = await Hive.openBox<AuthToken>('authTokenBox');

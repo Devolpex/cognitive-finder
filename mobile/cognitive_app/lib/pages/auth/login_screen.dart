@@ -37,21 +37,21 @@ class _LoginScreenState extends State<LoginScreen> {
           );
           logger.w('Login Successful: $response');
         }
-      } else {
-        logger.i('Signing up...');
-        final response = await authService.registerBySpring(
-          emailController.text.trim(),
-          usernameController.text.trim(),
-          passwordController.text.trim(),
-        );
-        logger.i('Sign Up Successful: $response');
-        if (response['result'] == 'success') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LayoutPage()),
-          );
-          logger.w('Login Successful: $response');
-        }
+      // } else {
+      //   logger.i('Signing up...');
+      //   final response = await authService.registerBySpring(
+      //     emailController.text.trim(),
+      //     usernameController.text.trim(),
+      //     passwordController.text.trim(),
+      //   );
+      //   logger.i('Sign Up Successful: $response');
+      //   if (response['result'] == 'success') {
+      //     Navigator.pushReplacement(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const LayoutPage()),
+      //     );
+      //     logger.w('Login Successful: $response');
+      //   }
       }
     } catch (e) {
       logger.i('Error: $e');
