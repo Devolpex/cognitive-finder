@@ -17,3 +17,17 @@ export const getLocationByPatientId = async (
     throw error;
   }
 };
+
+/**
+ * Service to get positions of the client by id
+ */
+export const getLocationByClientIdAPI = async (
+  clientId: string
+): Promise<PositionResponseTRC[]> => {
+  try {
+    const res = await axiosInstance.get(`/api/v1/positions/client/${clientId}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

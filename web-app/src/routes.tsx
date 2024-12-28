@@ -3,6 +3,7 @@ import { HomePage } from "./pages/HomePage";
 import { AdminLayout } from "./layout/AdminLayout";
 import { PatientPage } from "./pages/PatientPage";
 import { PatientMapPage } from "./pages/PatientMapPage";
+import { AllPatientsMapPage } from "./pages/AllPatientsMapPage";
 
 
 export const router = createBrowserRouter([
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "patient/map/:patientId",
         element: <PatientMapPage />,
+      },
+      {
+        path: "map",
+        element: <AllPatientsMapPage />,
       }
     ],
   },
