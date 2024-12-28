@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import { PositionResponseTRC } from "../types/location";
+import { Spinner } from "@material-tailwind/react";
 
 interface IMapProps {
   location: PositionResponseTRC | null;
@@ -27,19 +28,33 @@ const Map = ({ location }: IMapProps) => {
 
       // Create a marker for the user location
       if (location) {
-        userMarkerRef.current = L.marker([location.latitude, location.longitude]).addTo(mapInstanceRef.current)
+        userMarkerRef.current = L.marker([
+          location.latitude,
+          location.longitude,
+        ])
+          .addTo(mapInstanceRef.current)
           .bindPopup(`${location.speed} km/h`)
           .openPopup();
       }
     } else if (mapInstanceRef.current && location) {
       // If the map is already initialized, just update the view and marker
-      mapInstanceRef.current.setView([location.latitude, location.longitude], 13);
+      mapInstanceRef.current.setView(
+        [location.latitude, location.longitude],
+        13
+      );
 
       if (userMarkerRef.current) {
-        userMarkerRef.current.setLatLng([location.latitude, location.longitude]);
+        userMarkerRef.current.setLatLng([
+          location.latitude,
+          location.longitude,
+        ]);
       } else {
         // If no marker exists yet, create a new one
-        userMarkerRef.current = L.marker([location.latitude, location.longitude]).addTo(mapInstanceRef.current)
+        userMarkerRef.current = L.marker([
+          location.latitude,
+          location.longitude,
+        ])
+          .addTo(mapInstanceRef.current)
           .bindPopup(`${location.speed} km/h`)
           .openPopup();
       }
@@ -55,7 +70,15 @@ const Map = ({ location }: IMapProps) => {
   }, [location]); // Re-run the effect when location changes
 
   if (!location) {
-    return <div>Loading map...</div>; // Show a loading message if location is null
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner
+          className="h-12 w-12"
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        />
+      </div>
+    ); // Show a loading message if location is null
   }
 
   return <div id="map" ref={mapContainerRef} style={{ height: "100vh" }}></div>;

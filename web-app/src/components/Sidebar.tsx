@@ -1,3 +1,5 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   Typography,
@@ -18,15 +20,13 @@ const menuItems = [
   {
     title: "Patients",
     icon: UserGroupIcon,
-    path: "/admin/patients",
+    path: "/admin/patient",
   },
-
   {
     title: "Profile",
     icon: UserCircleIcon,
     path: "/profile",
   },
-
   {
     title: "Log Out",
     icon: PowerIcon,
@@ -35,6 +35,13 @@ const menuItems = [
 ];
 
 export function Sidebar() {
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  // Function to handle navigation
+  const handleNavigation = (path: string) => {
+    navigate(path); // Navigate to the specified path
+  };
+
   return (
     <Card
       className="h-[calc(100vh-2rem)] w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5"
@@ -62,6 +69,8 @@ export function Sidebar() {
         {menuItems.map((item) => (
           <ListItem
             key={item.title}
+            onClick={() => handleNavigation(item.path)} // Add the click handler to navigate
+            className="cursor-pointer"
             placeholder={undefined}
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
