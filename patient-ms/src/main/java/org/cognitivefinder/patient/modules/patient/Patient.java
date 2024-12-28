@@ -1,5 +1,6 @@
 package org.cognitivefinder.patient.modules.patient;
 
+import org.cognitivefinder.patient.modules.device.DeviceDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

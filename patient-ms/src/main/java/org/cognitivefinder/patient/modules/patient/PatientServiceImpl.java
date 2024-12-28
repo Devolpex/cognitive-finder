@@ -1,6 +1,8 @@
 package org.cognitivefinder.patient.modules.patient;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.cognitivefinder.patient.errors.exception.BusinessException;
 import org.cognitivefinder.patient.modules.device.DeviceDTO;
@@ -43,7 +45,7 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                 .sim(req.deviceNumber())
                 .build();
         DeviceDTO deviceDTO = deviceService.createDevice(deviceREQ);
-        
+
         PatientDTO patientDTO = mapper.toDTO(patient);
         ClientDTO client = ClientDTO.builder()
                 .id(req.clientId())
@@ -124,11 +126,22 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
 
     @Override
     public List<PatientDTO> findAll() {
+        // Fetch all devices first
+        List<DeviceDTO> deviceDTOs = deviceService.fetchAll();
+
+        // Create a Map of patientId -> device for efficient lookup
+        Map<String, DeviceDTO> devicesByPatientId = deviceDTOs.stream()
+                .collect(Collectors.toMap(
+                        DeviceDTO::getPatientId,
+                        device -> device,
+                        (existing, replacement) -> existing // In case of duplicates, keep existing
+                ));
+
         return repository.findAll().stream()
                 .map(patient -> {
-                    // DeviceDTO deviceDTO = deviceService.fetchByPatientId(patient.getId());
                     PatientDTO patientDTO = mapper.toDTO(patient);
-                    // patientDTO.setDevice(deviceDTO);
+                    // Try to find device for this patient, if not found device will be null
+                    patientDTO.setDevice(devicesByPatientId.get(patient.getId()));
                     return patientDTO;
                 })
                 .toList();
@@ -142,7 +155,6 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                 .map(Patient::getId)
                 .toList();
     }
-
 
     /**
      * Service to fetch pations informations by client Id
