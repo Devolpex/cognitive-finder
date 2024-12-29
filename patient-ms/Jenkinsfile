@@ -38,13 +38,18 @@ pipeline {
             steps {
                 dir('patient-ms') {
                     withSonarQubeEnv('sonarqube') {
-                        sh """
-                            ${SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectName=patient-ms \
-                            -Dsonar.projectKey=patient-ms \
-                            -Dsonar.sources=. \
-                            -Dsonar.java.binaries=target/classes
-                        """
+                sh """
+                    # Run tests and generate coverage report
+                    mvn clean test jacoco:report
+
+                    # Run the SonarQube scanner
+                    ${SCANNER_HOME}/bin/sonar-scanner \
+                    -Dsonar.projectName=patient-microservice \
+                    -Dsonar.projectKey=patient-microservice \
+                    -Dsonar.sources=. \
+                    -Dsonar.java.binaries=target/classes \
+                    -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml
+                """
                     }
                 }
             }
