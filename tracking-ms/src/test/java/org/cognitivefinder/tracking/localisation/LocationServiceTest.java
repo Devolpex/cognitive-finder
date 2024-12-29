@@ -90,7 +90,7 @@ public class LocationServiceTest {
     }
 
     @Test
-    void testGetPositionByPatientId_PatientNotFound() {
+    void testGetPositionByPatientIdaPatientNotFound() {
         String patientId = "patient123";
 
         when(deviceRepository.findByPatientId(patientId)).thenReturn(Optional.empty());
