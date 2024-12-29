@@ -3,6 +3,7 @@ import 'package:cognitive_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cognitive_app/services/patient_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'add_patient_page.dart';  // Import the new AddPatientPage
 
 class PatientPage extends StatefulWidget {
   final String accessToken;
@@ -49,8 +50,7 @@ class _PatientPageState extends State<PatientPage> {
 
   void _scrollListener() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !_isLoading) {
-      // Reached the bottom of the list
-      _fetchPatients(); // Fetch more patients
+      _fetchPatients();
     }
   }
 
@@ -115,7 +115,6 @@ class _PatientPageState extends State<PatientPage> {
                     } else {
                       List<Patient> patients = _patients;
 
-                      // Filter the patients based on the search query
                       if (searchQuery.isNotEmpty) {
                         patients = patients.where((patient) {
                           return patient.name!.toLowerCase().contains(searchQuery.toLowerCase());
@@ -127,7 +126,6 @@ class _PatientPageState extends State<PatientPage> {
                         itemCount: patients.length + (_isLoading ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == patients.length) {
-                            // Show loading indicator when fetching more data
                             return Center(child: CircularProgressIndicator());
                           }
 
@@ -159,6 +157,18 @@ class _PatientPageState extends State<PatientPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddPatientPage(accessToken: widget.accessToken),
+            ),
+          );
+        },
+        backgroundColor: primary,
+        child: Icon(Icons.add),
       ),
     );
   }

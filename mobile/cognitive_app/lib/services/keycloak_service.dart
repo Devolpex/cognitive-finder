@@ -17,4 +17,7 @@ class KeycloakService {
     return "${tokenPayload['given_name']} ${tokenPayload['family_name']}";
   }
 
+  static String? getSub(Map<String, dynamic> tokenPayload) {
+    return tokenPayload['sub'];
+  }
 }
