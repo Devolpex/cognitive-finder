@@ -67,11 +67,9 @@ cognitive-finder/
 ├── docs/                       # Documentation files
 ├── frontend/                   # Frontend code (Angular)
 ├── lib/                        # Shared libraries used by multiple microservices
-├── notification-ms/            # Notification microservice for alerts
 ├── patient-ms/                 # Patient management microservice
 ├── production/                 # Production deployment configurations
 ├── tracking-ms/                # Tracking microservice for GPS data and alerts
-├── user-ms/                    # User management microservice
 └── README.md                   # Project ReadMe file
 
 ```
@@ -81,8 +79,6 @@ cognitive-finder/
 1. **API Gateway**: Routes requests to appropriate microservices and handles service discovery.
 2. **Patient Management Service**: Manages patient data using MongoDB.
 3. **Tracking Service**: Handles GPS tracking data from wearable devices and stores it in PostgreSQL.
-4. **Notification Service**: Sends alerts to caregivers when a patient is at risk.
-5. **User Service**: Manages user authentication and authorization through Keycloak.
 
 ## Architecture
 
