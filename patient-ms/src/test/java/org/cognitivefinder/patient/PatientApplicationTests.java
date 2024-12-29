@@ -5,4 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class PatientApplicationTests {
+    @Test
+    void contextLoads() {
+        // This test ensures that the application context loads successfully.
+    }
 }
