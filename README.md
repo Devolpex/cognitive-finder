@@ -1,5 +1,10 @@
 # Cognitive Finder: Localization of Patients with Cognitive Disorders
 
+## Demo
+<video width="" controls poster="images/patient-list.png">
+  <source src="images/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 ## Introduction
 
 Cognitive disorders, such as Alzheimer's disease, pose significant challenges to patient safety, especially with the risk of wandering or elopement. This project proposes a solution using wearable sensors to monitor patients with cognitive impairments in real-time. The system tracks patient movements and detects when a patient leaves a predefined safe zone or exhibits unusual movement behaviors. Alerts are triggered to caregivers to enable prompt intervention, improving patient security and preventing dangerous situations.
@@ -100,7 +105,7 @@ This system uses a microservices architecture, where each service is responsible
 
 The backend architecture is designed to maintain a clean separation of concerns, ensuring flexibility, security, and scalability. It is divided into three primary layers:
 <div align="center">
-  <img src="images/backend-architecture.png" alt="Alt text" width="">
+  <img src="images/backend_architecture.png" alt="Alt text" width="">
 </div>
 
 #### 1. Controller Layer
@@ -141,6 +146,50 @@ The CI/CD pipeline automates the process of building, testing, and deploying the
 </div>
 
 The system is hosted on a cloud infrastructure using Kubernetes for container orchestration. It employs a Virtual Private Cloud (VPC) with subnets for different services (e.g., Kubernetes nodes, Jenkins server). The cloud setup ensures high availability and scalability.
+
+To display the interface of your application in the README, you can include a section like the following. This section will showcase screenshots of your application's user interface.
+
+### User Interface
+
+The **Cognitive Finder** application provides intuitive and accessible interfaces for caregivers to monitor patients. Below are some screenshots demonstrating the application's key features:
+
+#### 1. **Patient List**
+A list of all registered patients, allowing caregivers to view details and manage their information.
+<div align="center">
+  <img src="images/patient-list.png" alt="Patient List" width="600">
+</div>
+
+#### 2. **Add Patient**
+An interface for adding new patients to the system, including relevant personal information and monitoring parameters.
+<div align="center">
+  <img src="images/add-patient.png" alt="Add Patient" width="600">
+</div>
+
+#### 3. **Update Patient**
+The screen used to update patient details, ensuring accurate and up-to-date information.
+<div align="center">
+  <img src="images/update-patient.png" alt="Update Patient" width="600">
+</div>
+
+#### 4. **Patient Map**
+A map interface showing the patient's real-time location and movement within a defined safe zone.
+<div align="center">
+  <img src="images/patient-map.png" alt="Patient Map" width="600">
+</div>
+
+#### 5. **All Patient Map**
+A comprehensive view of all patients' locations on a single map, helping caregivers monitor multiple patients simultaneously.
+<div align="center">
+  <img src="images/all-patient-map.png" alt="All Patient Map" width="600">
+</div>
+
+#### 6. **Field Errors**
+This interface displays any errors in the system, such as missing or incorrect data, helping troubleshoot issues.
+<div align="center">
+  <img src="images/field-errors.png" alt="Field Errors" width="600">
+</div>
+
+These screenshots provide a glimpse into the user-friendly interface designed to assist caregivers in managing and monitoring patients with cognitive disorders effectively.
 
 ## Conclusion
 
