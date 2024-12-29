@@ -13,6 +13,8 @@ public record PatientREQ(
     @NotBlank(message = "Device IMEI is required")
     String deviceImei,
     @NotBlank(message = "Device number is required")
-    String deviceNumber
+    String deviceNumber,
+    @NotBlank(message = "Client ID is required")
+    String clientId
 ) {
 }

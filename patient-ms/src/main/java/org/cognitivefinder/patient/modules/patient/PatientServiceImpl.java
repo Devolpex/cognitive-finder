@@ -1,6 +1,8 @@
 package org.cognitivefinder.patient.modules.patient;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.cognitivefinder.patient.errors.exception.BusinessException;
 import org.cognitivefinder.patient.modules.device.DeviceDTO;
@@ -9,7 +11,6 @@ import org.cognitivefinder.patient.modules.device.DeviceService;
 import org.cognitivefinder.patient.modules.patient.dto.ClientDTO;
 import org.cognitivefinder.patient.modules.patient.dto.PatientDTO;
 import org.cognitivefinder.patient.modules.patient.http.PatientREQ;
-import org.cognitivefinder.patient.security.AuthService;
 import org.cognitivefinder.patient.utils.IService;
 import org.cognitivefinder.patient.utils.OwnPageRES;
 import org.springframework.data.domain.Pageable;
@@ -27,17 +28,14 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
     private final PatientRepository repository;
     private final PatientMapperImpl mapper;
     private final DeviceService deviceService;
-    private final AuthService authService;
 
     @Override
     public PatientDTO create(PatientREQ req) {
-        // TODO: Check if the client exists
-        String userID = authService.getAuthenticatedUserId();
 
         Patient patient = Patient.builder()
                 .name(req.name())
                 .maladie(req.maladie())
-                .clientId(userID)
+                .clientId(req.clientId())
                 .build();
         patient = repository.save(patient);
 
@@ -47,9 +45,10 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
                 .sim(req.deviceNumber())
                 .build();
         DeviceDTO deviceDTO = deviceService.createDevice(deviceREQ);
+
         PatientDTO patientDTO = mapper.toDTO(patient);
         ClientDTO client = ClientDTO.builder()
-                .id(userID)
+                .id(req.clientId())
                 .build();
         patientDTO.setDevice(deviceDTO);
         patientDTO.setClient(client);
@@ -58,8 +57,6 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
 
     @Override
     public PatientDTO update(String id, PatientREQ req) {
-        // TODO: Check if the client exists
-
         return repository.findById(id)
                 .map(p -> {
                     // Update the device information in the tracking microservice
@@ -129,11 +126,22 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
 
     @Override
     public List<PatientDTO> findAll() {
+        // Fetch all devices first
+        List<DeviceDTO> deviceDTOs = deviceService.fetchAll();
+
+        // Create a Map of patientId -> device for efficient lookup
+        Map<String, DeviceDTO> devicesByPatientId = deviceDTOs.stream()
+                .collect(Collectors.toMap(
+                        DeviceDTO::getPatientId,
+                        device -> device,
+                        (existing, replacement) -> existing // In case of duplicates, keep existing
+                ));
+
         return repository.findAll().stream()
                 .map(patient -> {
-                    DeviceDTO deviceDTO = deviceService.fetchByPatientId(patient.getId());
                     PatientDTO patientDTO = mapper.toDTO(patient);
-                    patientDTO.setDevice(deviceDTO);
+                    // Try to find device for this patient, if not found device will be null
+                    patientDTO.setDevice(devicesByPatientId.get(patient.getId()));
                     return patientDTO;
                 })
                 .toList();
@@ -145,6 +153,20 @@ public class PatientServiceImpl implements IService<PatientDTO, PatientREQ, Pati
     public List<String> findAllByClientId(String clientId) {
         return repository.findAllByClientId(clientId).stream()
                 .map(Patient::getId)
+                .toList();
+    }
+
+    /**
+     * Service to fetch pations informations by client Id
+     */
+    public List<PatientDTO> fetchByClientId(String clientId) {
+        return repository.findAllByClientId(clientId).stream()
+                .map(patient -> {
+                    DeviceDTO deviceDTO = deviceService.fetchByPatientId(patient.getId());
+                    PatientDTO patientDTO = mapper.toDTO(patient);
+                    patientDTO.setDevice(deviceDTO);
+                    return patientDTO;
+                })
                 .toList();
     }
 }

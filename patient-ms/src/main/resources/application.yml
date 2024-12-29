@@ -8,9 +8,12 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://patient_user:patient_password@localhost:27020/patient_db}
+  
+
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
+
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
@@ -40,3 +43,5 @@ management:
 logging:
   level:
     org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+
