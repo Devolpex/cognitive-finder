@@ -88,8 +88,6 @@ This system uses a microservices architecture, where each service is responsible
 
 - **Patient Management**: Stores and manages patient data.
 - **Tracking Service**: Processes GPS data and triggers alerts.
-- **Notification Service**: Sends notifications to caregivers.
-- **User Service**: Handles user registration and authentication.
 <div align="center">
   <img src="images/microservices-architecture.png" alt="Alt text" width="500">
 </div>
