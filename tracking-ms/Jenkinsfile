@@ -46,7 +46,9 @@ pipeline {
                     ${SCANNER_HOME}/bin/sonar-scanner \
                     -Dsonar.projectName=tracking-microservice \
                     -Dsonar.projectKey=tracking-microservice \
-                    -Dsonar.sources=. \
+                    -Dsonar.sources=src/main/java\
+                    -Dsonar.tests=src/test/java \
+                    -Dsonar.test.inclusions=**/*Test*/** \
                     -Dsonar.java.binaries=target/classes \
                     -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml
    """
