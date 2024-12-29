@@ -1,3 +1,4 @@
+import 'package:cognitive_app/model/location.dart';
 import 'package:cognitive_app/model/patient.dart';
 import 'package:cognitive_app/services/auth_service.dart';
 import 'package:cognitive_app/utils/keys.dart';
@@ -44,6 +45,37 @@ Future<List<Patient>> getPatientsPage() async {
     }
   }
 
+  // Method to locate a Patient
+  Future<Location> getLocationByPatientId(String id) async {
+    final String uri = "$backendUrl/api/v1/positions/patient/$id";
+    try {
+      logger.i("Fetching patient with id $id");
+
+      // Send GET request with all required headers
+      final response = await dio.get(
+        uri,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
+      );
+
+      logger.i("Location response Data: ${response.data}");
+
+      // Check if the response status code is 200 (OK)
+      if (response.statusCode == 200) {
+        // Parse the response data
+        return Location.fromJson(response.data);
+      } else {
+        // Handle non-200 status codes
+        logger.e("Failed to fetch patient location: ${response.statusCode}");
+        throw Exception("Failed to fetch patient location");
+      }
+    } catch (e) {
+      // Handle any errors that occur during the request
+      logger.e("Error fetching patient location: $e");
+      throw Exception("Error fetching patient location: $e");
+    }
+  }
   
   // // Method to fetch a paginated list of Patient
   // Future<List<Patient>> getPatientsPage(String accessToken) async {
@@ -73,21 +105,5 @@ Future<List<Patient>> getPatientsPage() async {
   //   logger.e("An error occurred: $error");
   //   throw Exception("An unexpected error occurred: $error");
   // }
-  // }
-  
-  // Future<Patient> getPatientById(String id) async {
-  //   // Get patient by id from the API
-  // }
-  
-  // Future<Patient> addPatient(Patient patient) async {
-  //   // Add patient to the API
-  // }
-  
-  // Future<Patient> updatePatient(Patient patient) async {
-  //   // Update patient in the API
-  // }
-  
-  // Future<void> deletePatient(String id) async {
-  //   // Delete patient from the API
   // }
 }

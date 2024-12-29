@@ -1,12 +1,11 @@
 import 'package:cognitive_app/components/map_widget.dart';
+import 'package:cognitive_app/pages/flottes/patient_list_widget.dart';
+import 'package:cognitive_app/services/patient_service.dart';
 import 'package:cognitive_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'device_list_widget.dart';
 
 class MovementsPage extends StatefulWidget {
   const MovementsPage({super.key});
@@ -18,99 +17,69 @@ class MovementsPage extends StatefulWidget {
 class _MovementsPageState extends State<MovementsPage> {
   final LatLng _center = const LatLng(31.6225, -7.9898);
   final MapController _mapController = MapController();
-  MapStyle _currentMapStyle = MapStyle.GoogleRoadMap;
+  final PatientService _patientService = PatientService();
+  List<Marker> _markers = [];
   double _currentZoom = 10.0;
   bool _showDeviceList = false;
   String _searchQuery = '';
-
-  // late DevicesController devicesController;
-  // late PositionController positionController;
-
-  final List<Marker> _markers = [];
+  MapStyle _currentMapStyle = MapStyle.GoogleRoadMap;
 
   @override
   void initState() {
     super.initState();
-    // final websocketService = Provider.of<WebSocketService>(context, listen: false);
-    // devicesController = Get.put(DevicesController(websocketService));
-    // positionController = Get.put(PositionController(websocketService));
-
-    // _fetchDevicePositions();
-    // _setupWebSocketListener();
+    _fetchPatientsAndLocations();
   }
 
-  // Future<void> _fetchDevicePositions() async {
-  //   await devicesController.getDevicesList();
-  //   await positionController.getPositions();
-  //   _generateMarkers();
-  // }
+  // Fetch patients and locations, create markers and add them to the map
+  Future<void> _fetchPatientsAndLocations() async {
+    try {
+      // Fetch patients
+      final patients = await _patientService.getPatientsPage();
 
-  // void _setupWebSocketListener() {
-  //   final websocketService = Provider.of<WebSocketService>(context, listen: false);
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     websocketService.connect();
-  //     websocketService.addListener(() {
-  //       setState(() {
-  //         _generateMarkers();
-  //       });
-  //     });
-  //   });
-  // }
+      // Fetch locations and create markers for each patient
+      List<Marker> markers = [];
+      for (var patient in patients) {
+        try {
+          final location = await _patientService.getLocationByPatientId(patient.id.toString());
+          markers.add(_createMarkerForPatient(patient.name, location.latitude!, location.longitude!));
+        } catch (e) {
+          debugPrint("Error fetching location for patient ${patient.id}: $e");
+        }
+      }
 
-  // void _generateMarkers() {
-  //   final devices = devicesController.Devices;
-  //   final positions = positionController.positions;
-  //   setState(() {
-  //     _markers = devices.where((device) {
-  //       return device.expirationTime == null || DateTime.now().isBefore(device.expirationTime!);
-  //     }).map((device) {
-  //       final position = positions.firstWhere((pos) => pos.deviceId == device.id, orElse: () => Position_model());
+      setState(() {
+        _markers = markers;
+      });
+    } catch (e) {
+      debugPrint("Error fetching patients or locations: $e");
+    }
+  }
 
-  //       final iconPath = _getMarkerImage(position);
-  //       final shouldRotate = position.ignition == true && (position.speed ?? 0) > 0;
-  //       final rotationAngle = shouldRotate ? (position.course ?? 0) * (3.14159 / 180) : 0.0;
+  // Create a marker for a patient with its location
+  Marker _createMarkerForPatient(String? patientId, double latitude, double longitude) {
+    return Marker(
+      point: LatLng(latitude, longitude),
+      width: 80.sp,
+      height: 80.sp,
+      child: Builder(
+        builder: (ctx) => Column(
+          children: [
+            Icon(
+              Icons.person_pin_circle,
+              color: Colors.red,
+              size: 50.sp,
+            ),
+            Text(
+              'ID: $patientId',
+              style: TextStyle(fontSize: 12.sp, color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  //       return Marker(
-  //         point: LatLng(position.latitude ?? 0, position.longitude ?? 0),
-  //         width: 80.sp,
-  //         height: 80.sp,
-  //         child: Column(
-  //           children: [
-  //             Transform.rotate(
-  //               angle: rotationAngle,
-  //               child: Image.asset(
-  //                 iconPath,
-  //                 fit: BoxFit.contain,
-  //                 width: 50.sp,
-  //                 height: 50.sp,
-  //               ),
-  //             ),
-  //             Text(
-  //               device.name ?? 'Unknown',
-  //               style: TextStyle(
-  //                 fontSize: 12.sp,
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //               overflow: TextOverflow.ellipsis,
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     }).toList();
-  //   });
-  // }
-
-  // String _getMarkerImage(Position_model position) {
-  //   if (position.ignition == true && (position.speed ?? 0) > 0) {
-  //     return 'assets/images/en-marche-marker.png';
-  //   } else if (position.ignition == true && (position.speed ?? 0) == 0) {
-  //     return 'assets/images/en-ralenti-marker.png';
-  //   } else {
-  //     return 'assets/images/en-parking-marker.png';
-  //   }
-  // }
-
+  // Toggle the visibility of the device list
   void _toggleDeviceList() {
     setState(() {
       _showDeviceList = !_showDeviceList;
@@ -129,17 +98,18 @@ class _MovementsPageState extends State<MovementsPage> {
             icon: const Icon(Icons.map),
             onPressed: () {
               setState(() {
+                // Toggle between map styles
                 _currentMapStyle = _currentMapStyle == MapStyle.GoogleRoadMap
                     ? MapStyle.GoogleHybrid
                     : MapStyle.GoogleRoadMap;
               });
-              print("Change Map Type to $_currentMapStyle");
             },
           ),
         ],
       ),
       body: Stack(
         children: [
+          // Map with markers
           MapWidget(
             center: _center,
             currentZoom: _currentZoom,
@@ -150,8 +120,10 @@ class _MovementsPageState extends State<MovementsPage> {
                 _currentZoom = newZoom;
               });
             },
-            currentMapStyle: _currentMapStyle, polylines: [],
+            currentMapStyle: MapStyle.GoogleRoadMap, // Set map style
+            polylines: [],
           ),
+          // Floating Action Button to toggle device list
           Positioned(
             top: 10,
             left: 10,
@@ -165,6 +137,7 @@ class _MovementsPageState extends State<MovementsPage> {
               ),
             ),
           ),
+          // Device List View
           if (_showDeviceList)
             Positioned(
               top: 60,
@@ -179,6 +152,7 @@ class _MovementsPageState extends State<MovementsPage> {
                 ),
                 child: Column(
                   children: [
+                    // Search Bar and Close Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -190,7 +164,7 @@ class _MovementsPageState extends State<MovementsPage> {
                               });
                             },
                             decoration: const InputDecoration(
-                              hintText: "Rechercher un véhicule ...",
+                              hintText: "Rechercher un patient ...",
                               prefixIcon: Icon(Icons.search),
                             ),
                           ),
@@ -203,18 +177,10 @@ class _MovementsPageState extends State<MovementsPage> {
                       ],
                     ),
                     SizedBox(height: 10.h),
-                    // Expanded(
-                    //   child: DeviceListWidget(
-                    //     // devicesController: devicesController,
-                    //     // positionController: positionController,
-                    //     searchQuery: _searchQuery,
-                    //     onDeviceTap: (LatLng latLng) {
-                    //       _mapController.move(latLng, 15.0);
-                    //       _toggleDeviceList();
-                    //     },
-                    //   ),
-                    // ),
-                    SizedBox(height: 100.h),
+                    Expanded(
+                      child: PatientListWidget(searchQuery: _searchQuery),
+                    ),
+                    SizedBox(height: 5.h),
                   ],
                 ),
               ),
