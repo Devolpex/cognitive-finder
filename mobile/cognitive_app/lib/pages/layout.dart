@@ -29,18 +29,9 @@ class _LayoutPageState extends State<LayoutPage> with SingleTickerProviderStateM
   void _initPages() {
     pages = [
       MovementsPage(),
-      // const DevicesPage(),
-      // ReportsPage(onExploreMore: () {
-      //   setState(() {
-      //     currentPage = 0; // Navigate back to MovementsPage
-      //   });
-      // }),
       PatientPage(accessToken: accessToken ?? ''),
-      ProfilPage(accessToken: accessToken ?? ''),
-      // MaintenancePage(),
       NotificationsPage(),
       ProfilPage(accessToken: accessToken ?? ''),
-      // ReservationPage(),
     ];
     print("Pages initialized with ${pages.length} items");
   }
@@ -59,7 +50,6 @@ class _LayoutPageState extends State<LayoutPage> with SingleTickerProviderStateM
     final List<TabItem> allTabs = const [
       TabItem(icon: Icons.location_on, title: 'Flottes'),
       TabItem(icon: Icons.person_add, title: 'Patients'),
-      TabItem(icon: Icons.history, title: 'Historique'),
       TabItem(icon: Icons.notifications, title: 'Notifications'),
       TabItem(icon: Icons.person, title: 'Profile'),
     ];

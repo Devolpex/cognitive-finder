@@ -39,20 +39,26 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        flexibleSpace: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconShadowButton(
-                onPress: () => popPage(context),
-                icon: Icons.arrow_back,
-              ),
-            ],
+        title: Text('Notifications'),
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
+        actions: [
+          PopupMenuButton<MenuItem>(
+            onSelected: (item) => item.onClick(),
+            itemBuilder: (context) => MenuItem.items.map((item) {
+              return PopupMenuItem<MenuItem>(
+                value: item,
+                child: Row(
+                  children: [
+                    Icon(item.icon, color: Colors.black),
+                    SizedBox(width: 8),
+                    Text(item.title),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
-        ),
+        ],
       ),
       body: notifications.isEmpty
           ? Center(
