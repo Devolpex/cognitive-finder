@@ -179,6 +179,25 @@ class PatientServiceImplTest {
         assertEquals(0, result.size());
     }
 
+    @Test
+    void tesUpdate() {
+        // Arrange
+        when(patientRepository.findById(anyString())).thenReturn(Optional.of(patient));
+        when(patientRepository.save(any(Patient.class))).thenReturn(patient);
+        when(patientMapper.toDTO(any(Patient.class))).thenReturn(patientDTO);
+        when(deviceService.fetchByPatientId(anyString())).thenReturn(deviceDTO);
+
+        // Act
+        PatientDTO result = patientService.update("1", patientREQ);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("John Doe", result.getName());
+        assertEquals("Flu", result.getMaladie());
+        assertNotNull(result.getDevice());
+        assertEquals("imei123", result.getDevice().getImei());
+    }
+
     
 
 }
