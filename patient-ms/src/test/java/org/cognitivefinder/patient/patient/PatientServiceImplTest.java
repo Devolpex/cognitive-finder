@@ -10,16 +10,13 @@ import org.cognitivefinder.patient.modules.patient.PatientRepository;
 import org.cognitivefinder.patient.modules.patient.PatientServiceImpl;
 import org.cognitivefinder.patient.modules.patient.dto.PatientDTO;
 import org.cognitivefinder.patient.modules.patient.http.PatientREQ;
-import org.cognitivefinder.patient.utils.OwnPageRES;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -64,63 +61,25 @@ class PatientServiceImplTest {
         when(deviceService.fetchByPatientId(anyString())).thenReturn(deviceDTO);
     }
 
-    // @Test
-    // void testCreate() {
-    // // Arrange
-    // when(patientRepository.save(any(Patient.class))).thenReturn(patient);
-    // when(patientMapper.toDTO(any(Patient.class))).thenReturn(patientDTO);
-    // when(deviceService.createDevice(any(DeviceREQ.class))).thenReturn(deviceDTO);
+    @Test
+    void testCreate() {
+        // Arrange
+        when(patientRepository.save(any(Patient.class))).thenReturn(patient);
+        when(patientMapper.toDTO(any(Patient.class))).thenReturn(patientDTO);
+        when(deviceService.createDevice(any(DeviceREQ.class))).thenReturn(deviceDTO);
 
-    // // Act
-    // PatientDTO result = patientService.create(patientREQ);
+        // Act
+        PatientDTO result = patientService.create(patientREQ);
 
-    // // Assert
-    // assertNotNull(result);
-    // assertEquals("1", result.getId());
-    // assertEquals("John Doe", result.getName());
-    // assertEquals("Flu", result.getMaladie());
-    // assertNotNull(result.getDevice());
-    // assertEquals("imei123", result.getDevice().getImei());
-    // }
+        // Assert
+        assertNotNull(result);
+        assertEquals("1", result.getId());
+        assertEquals("John Doe", result.getName());
+        assertEquals("Flu", result.getMaladie());
+        assertNotNull(result.getDevice());
+        assertEquals("imei123", result.getDevice().getImei());
+    }
 
-    // @Test
-    // void testUpdate() {
-    // // Arrange
-    // // Creating mock Patient and PatientDTO
-    // Patient patient = Patient.builder().id("1").name("John
-    // Doe").maladie("Cold").build();
-    // PatientDTO patientDTO = PatientDTO.builder().id("1").name("John
-    // Doe").maladie("Cold").build();
-
-    // // Creating mock DeviceDTO
-    // DeviceDTO deviceDTO = new DeviceDTO();
-    // deviceDTO.setImei("imei123");
-    // deviceDTO.setSim("sim123");
-
-    // // Defining the update request
-    // PatientREQ updateRequest = PatientREQ.builder().name("Jane
-    // Doe").maladie("Cold").deviceImei("imei456")
-    // .deviceNumber("sim456").build();
-
-    // // Mocking the repository and other dependencies
-    // when(patientRepository.findById(anyString())).thenReturn(Optional.of(patient));
-    // when(patientMapper.toDTO(any(Patient.class))).thenReturn(patientDTO);
-    // when(deviceService.fetchByPatientId(anyString())).thenReturn(deviceDTO);
-    // when(deviceService.update(anyLong(),
-    // any(DeviceREQ.class))).thenReturn(deviceDTO);
-
-    // // Act
-    // PatientDTO result = patientService.update("1", updateRequest);
-
-    // // Assert
-    // assertNotNull(result, "PatientDTO should not be null");
-    // assertEquals("Jane Doe", result.getName(), "Patient name should be updated");
-    // assertEquals("Cold", result.getMaladie(), "Patient disease should remain the
-    // same");
-    // assertNotNull(result.getDevice(), "Device should not be null");
-    // assertEquals("imei456", result.getDevice().getImei(), "Device IMEI should
-    // match the updated value");
-    // }
 
     @Test
     void testFindById() {
@@ -219,5 +178,7 @@ class PatientServiceImplTest {
         assertNotNull(result);
         assertEquals(0, result.size());
     }
+
+    
 
 }
