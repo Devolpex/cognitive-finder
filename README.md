@@ -182,6 +182,52 @@ This interface displays any errors in the system, such as missing or incorrect d
 
 These screenshots provide a glimpse into the user-friendly interface designed to assist caregivers in managing and monitoring patients with cognitive disorders effectively.
 
+## Mobile Interface
+
+The mobile interface of the Cognitive Finder application is designed to provide an intuitive and seamless experience for users. Below are the key pages and features of the mobile version:
+
+### 1. Auth Page
+- **Login Page**: A simple and secure login page for users to authenticate.
+  ![Login](images/cog-screens-mobile/authPage/Login.png)
+
+- **Sign Up Page**: Allows new users to register for the application.
+  ![Sign Up](images/cog-screens-mobile/authPage/SignUP.png)
+
+### 2. Flottes Page
+- **Flottes Overview**: Displays the list of available flottes in the system.
+  ![Flottes](images/cog-screens-mobile/FlottesPage/Flottes.png)
+
+- **Patient on Flottes**: Shows a patient assigned to a flotte.
+  ![Patient on Flottes](images/cog-screens-mobile/FlottesPage/Patient%20on%20flottes.png)
+
+- **Patients Location in Map**: Displays the location of patients on a map for better tracking.
+  ![Patients Location in Map](images/cog-screens-mobile/FlottesPage/Patients%20location%20in%20map.png)
+
+### 3. Notification Page
+- **Notification Features**: A page showcasing the different types of notifications available in the app.
+  ![Notification Features](images/cog-screens-mobile/NotificationPage/NotificationFeatures.png)
+
+- **Notification**: The main notifications page where users can view alerts.
+  ![Notification](images/cog-screens-mobile/NotificationPage/Notification.png)
+
+### 4. Patient Page
+- **Add Patient**: A screen for adding new patients to the system.
+  ![Add Patient](images/cog-screens-mobile/PatientPage/AddPatient.png)
+
+- **Patient List**: Displays a list of all registered patients.
+  ![Patient List](images/cog-screens-mobile/PatientPage/PatientList.png)
+
+- **Search Patient**: Allows users to search for specific patients.
+  ![Search Patient](images/cog-screens-mobile/PatientPage/SearchPatient.png)
+
+### 5. Profile Page
+- **Profile Overview**: Shows the user's profile information.
+  ![Profile](images/cog-screens-mobile/ProfilePage/Profil.png)
+
+- **Sign Out**: Option to sign out of the application.
+  ![Sign Out](images/cog-screens-mobile/ProfilePage/SignOut.png)
+
+
 ## Conclusion
 
 The **Cognitive Finder** project provides a comprehensive solution for managing patients with cognitive disorders. By leveraging wearable sensors, real-time monitoring, and a robust cloud infrastructure, it enhances patient safety and caregiver efficiency. The project is built using modern technologies like microservices, Docker, Kubernetes, and CI/CD practices, ensuring scalability and maintainability for future enhancements.
