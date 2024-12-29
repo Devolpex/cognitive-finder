@@ -1,10 +1,7 @@
 # Cognitive Finder: Localization of Patients with Cognitive Disorders
 
 ## Demo
-<video width="" controls poster="images/patient-list.png">
-  <source src="https://youtu.be/SFVhbytsy_M" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[![Watch the video](images/patient-list.png)](https://youtu.be/SFVhbytsy_M)
 ## Introduction
 
 Cognitive disorders, such as Alzheimer's disease, pose significant challenges to patient safety, especially with the risk of wandering or elopement. This project proposes a solution using wearable sensors to monitor patients with cognitive impairments in real-time. The system tracks patient movements and detects when a patient leaves a predefined safe zone or exhibits unusual movement behaviors. Alerts are triggered to caregivers to enable prompt intervention, improving patient security and preventing dangerous situations.
